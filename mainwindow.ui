@@ -14,57 +14,39 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QStackedWidget" name="stackedWidget">
-    <property name="geometry">
-     <rect>
-      <x>9</x>
-      <y>9</y>
-      <width>782</width>
-      <height>539</height>
-     </rect>
-    </property>
-    <property name="currentIndex">
-     <number>0</number>
-    </property>
-    <widget class="QWidget" name="pageBaseView">
-     <widget class="QLabel" name="label">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>20</y>
-        <width>121</width>
-        <height>31</height>
-       </rect>
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <widget class="QStackedWidget" name="stackedWidget">
+      <property name="currentIndex">
+       <number>0</number>
       </property>
-      <property name="text">
-       <string>База данных сейчас</string>
-      </property>
+      <widget class="QWidget" name="pageBaseView">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>База данных сейчас</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>TextLabel</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTableWidget" name="tableWidget"/>
+        </item>
+       </layout>
+       <zorder>tableWidget</zorder>
+       <zorder>label</zorder>
+       <zorder>label_2</zorder>
+      </widget>
      </widget>
-     <widget class="QLabel" name="label_2">
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>30</y>
-        <width>49</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>TextLabel</string>
-      </property>
-     </widget>
-     <widget class="QTableWidget" name="tableWidget">
-      <property name="geometry">
-       <rect>
-        <x>150</x>
-        <y>180</y>
-        <width>301</width>
-        <height>251</height>
-       </rect>
-      </property>
-     </widget>
-    </widget>
-   </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -72,16 +54,16 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menu">
+   <widget class="QMenu" name="menuBase">
     <property name="title">
      <string>Базы данных</string>
     </property>
-    <addaction name="action"/>
-    <addaction name="action_2"/>
-    <addaction name="action_13"/>
+    <addaction name="actionCreateBase"/>
+    <addaction name="actionUnlockBase"/>
+    <addaction name="actionRecentBases"/>
     <addaction name="action_14"/>
     <addaction name="separator"/>
     <addaction name="action_15"/>
@@ -89,11 +71,11 @@
     <addaction name="separator"/>
     <addaction name="action_17"/>
    </widget>
-   <widget class="QMenu" name="menu_2">
+   <widget class="QMenu" name="menuEntries">
     <property name="title">
      <string>Записи</string>
     </property>
-    <addaction name="action_3"/>
+    <addaction name="actionAddNewEntry"/>
     <addaction name="action_5"/>
     <addaction name="action_6"/>
     <addaction name="separator"/>
@@ -116,23 +98,23 @@
     </property>
     <addaction name="action_26"/>
    </widget>
-   <addaction name="menu"/>
-   <addaction name="menu_2"/>
+   <addaction name="menuBase"/>
+   <addaction name="menuEntries"/>
    <addaction name="menu_3"/>
    <addaction name="menu_4"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="action">
+  <action name="actionCreateBase">
    <property name="text">
     <string>Создать базу данных</string>
    </property>
   </action>
-  <action name="action_2">
+  <action name="actionUnlockBase">
    <property name="text">
     <string>Открыть базу данных</string>
    </property>
   </action>
-  <action name="action_3">
+  <action name="actionAddNewEntry">
    <property name="text">
     <string>Создать запись</string>
    </property>
@@ -157,7 +139,7 @@
     <string>Скопировать пароль</string>
    </property>
   </action>
-  <action name="action_13">
+  <action name="actionRecentBases">
    <property name="text">
     <string>Недавние базы данных</string>
    </property>

@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -9,20 +9,25 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    addnewentrywidget.cpp \
+    aes256.cpp \
     createbasewidget.cpp \
     main.cpp \
     mainwindow.cpp \
     unlockbasewidget.cpp \
-    welcomewidget.cpp
+    welcomewidget.cpp    
 
 HEADERS += \
     EnumWidgets.h \
+    addnewentrywidget.h \
+    aes256.h \
     createbasewidget.h \
     mainwindow.h \
     unlockbasewidget.h \
     welcomewidget.h
 
 FORMS += \
+    addnewentrywidget.ui \
     createbasewidget.ui \
     mainwindow.ui \
     unlockbasewidget.ui \

@@ -5,14 +5,49 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+
+    //Присоединение базы данных
+    QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL");
+
+    db.setHostName("localhost");
+    db.setPort(5432); // порт по умолчанию для PostgreSQL
+    db.setDatabaseName("password_managerdb");
+    db.setUserName("postgres");
+    db.setPassword("z1JBI2@3Z1");
+
+    if (db.open()) {
+        qDebug() << "Успешное подключение к базе данных";
+
+        // Выполняем SQL-запросы или другие операции с базой данных
+
+        // Закрываем соединение с базой данных
+        db.close();
+    } else {
+        qDebug() << "Ошибка при подключении к базе данных:";
+    }
+
+
+    //Создание ui-форм
     _welcomeWidget = new WelcomeWidget(this);
     _unlockBaseWidget = new UnlockBaseWindow(this);
     _createBaseWidget = new CreateBaseWidget(this);
+    _addNewEntryWidget = new AddNewEntryWidget(this);
+
+    //Добавление виджетов в стэк виджетов
     ui->setupUi(this);
-    ui->stackedWidget->addWidget(_welcomeWidget);
-    ui->stackedWidget->addWidget(_unlockBaseWidget);
-    ui->stackedWidget->addWidget(_createBaseWidget);
+    ui->stackedWidget->insertWidget(1, _welcomeWidget);
+    ui->stackedWidget->insertWidget(2, _addNewEntryWidget);
     ui->stackedWidget->setCurrentIndex(IndexWelcomeWidget);
+
+    //Коннект QAction
+    connect(ui->actionCreateBase, &QAction::triggered,
+            this, &MainWindow::actionCreateBase);
+    connect(ui->actionUnlockBase, &QAction::triggered,
+            this, &MainWindow::actionUnlockBase);
+    connect(ui->actionAddNewEntry, &QAction::triggered,
+            this, &MainWindow::actionAddNewEntry);
+
+    //Коннект Push_Buttons
     connect(_welcomeWidget, &WelcomeWidget::trasmitUnlockBase,
             this, &MainWindow::changeStackedWidgetIndex);
     connect(_welcomeWidget, &WelcomeWidget::trasmitCreateBase,
@@ -28,8 +63,30 @@ MainWindow::~MainWindow()
 
 void MainWindow::changeStackedWidgetIndex(int index)
 {
-    ui->stackedWidget->setCurrentIndex(index);
+    switch (index) {
+    case IndexСreateBaseWidget:
+        actionCreateBase();
+        break;
+    case IndexUnlockBaseWidget:
+        actionUnlockBase();
+        break;
+    default:
+        ui->stackedWidget->setCurrentIndex(index);
+        break;
+    }
 }
 
+void MainWindow::actionCreateBase()
+{
+     _createBaseWidget->show();
+}
 
+void MainWindow::actionUnlockBase()
+{
+    _unlockBaseWidget->show();
+}
 
+void MainWindow::actionAddNewEntry()
+{
+    changeStackedWidgetIndex(IndexAddNewEntryWidget);
+}
