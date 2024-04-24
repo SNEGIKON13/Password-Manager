@@ -2,8 +2,13 @@
 #define CREATEBASEWIDGET_H
 
 #include <QDialog>
+#include <QMessageBox>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlError>
 
 #include "EnumWidgets.h"
+#include "db_controller.h"
 
 namespace Ui {
 class CreateBaseWidget;
@@ -25,6 +30,8 @@ private slots:
 
 private:
     Ui::CreateBaseWidget *ui;
+    QString baseName, basePassword, queryRequest;
+    QSqlDatabase db;
 
 };
 

@@ -6,27 +6,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
 
-    //Присоединение базы данных
-    QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL");
-
-    db.setHostName("localhost");
-    db.setPort(5432); // порт по умолчанию для PostgreSQL
-    db.setDatabaseName("password_managerdb");
-    db.setUserName("postgres");
-    db.setPassword("z1JBI2@3Z1");
-
-    if (db.open()) {
-        qDebug() << "Успешное подключение к базе данных";
-
-        // Выполняем SQL-запросы или другие операции с базой данных
-
-        // Закрываем соединение с базой данных
-        db.close();
-    } else {
-        qDebug() << "Ошибка при подключении к базе данных:";
-    }
-
-
     //Создание ui-форм
     _welcomeWidget = new WelcomeWidget(this);
     _unlockBaseWidget = new UnlockBaseWindow(this);

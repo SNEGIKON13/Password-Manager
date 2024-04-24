@@ -6,62 +6,69 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>846</width>
-    <height>646</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QPushButton" name="openExistBaseButton">
-   <property name="geometry">
-    <rect>
-     <x>150</x>
-     <y>340</y>
-     <width>281</width>
-     <height>91</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Открыть существующую базу данных</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="createBaseButton">
-   <property name="geometry">
-    <rect>
-     <x>470</x>
-     <y>340</y>
-     <width>171</width>
-     <height>91</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Создать базу данных</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>180</x>
-     <y>40</y>
-     <width>471</width>
-     <height>101</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Ранее использованных баз данных не обнаружено</string>
-   </property>
-  </widget>
-  <widget class="QListWidget" name="listWidget">
-   <property name="geometry">
-    <rect>
-     <x>180</x>
-     <y>120</y>
-     <width>371</width>
-     <height>141</height>
-    </rect>
-   </property>
-  </widget>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:700;&quot;&gt;Ранее использованных баз данных не обнаружено!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QListWidget" name="listWidget"/>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="0">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="openExistBaseButton">
+         <property name="minimumSize">
+          <size>
+           <width>250</width>
+           <height>100</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font: 600 11pt &quot;Segoe UI&quot;;</string>
+         </property>
+         <property name="text">
+          <string>Открыть существующую базу данных</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="createBaseButton">
+         <property name="minimumSize">
+          <size>
+           <width>250</width>
+           <height>100</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font: 600 11pt &quot;Segoe UI&quot;;</string>
+         </property>
+         <property name="text">
+          <string>Создать базу данных</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>

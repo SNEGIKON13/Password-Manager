@@ -26,7 +26,6 @@ public:
 
 public slots:
     void changeStackedWidgetIndex(int index);
-
     void actionCreateBase();
     void actionUnlockBase();
     void actionAddNewEntry();

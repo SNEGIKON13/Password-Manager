@@ -2,6 +2,7 @@
 #define UNLOCKBASEWIDGET_H
 
 #include <QDialog>
+#include <QMessageBox>
 
 #include "EnumWidgets.h"
 

@@ -12,6 +12,7 @@ SOURCES += \
     addnewentrywidget.cpp \
     aes256.cpp \
     createbasewidget.cpp \
+    db_controller.cpp \
     main.cpp \
     mainwindow.cpp \
     unlockbasewidget.cpp \
@@ -22,6 +23,7 @@ HEADERS += \
     addnewentrywidget.h \
     aes256.h \
     createbasewidget.h \
+    db_controller.h \
     mainwindow.h \
     unlockbasewidget.h \
     welcomewidget.h

@@ -15,6 +15,12 @@ UnlockBaseWindow::~UnlockBaseWindow()
 
 void UnlockBaseWindow::on_unlockBaseButton_clicked()
 {
-    emit transmitMainWindow(IndexMainWindow);
+    if (true) {
+        emit transmitMainWindow(IndexMainWindow);
+    }
+    else {
+        QMessageBox::warning(this, "Ошибка", "Неверный пароль!");
+    }
+
 }
 
