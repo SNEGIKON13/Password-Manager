@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>462</width>
-    <height>164</height>
+    <width>473</width>
+    <height>96</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -24,25 +24,25 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Вы пытаетесь открыть базу данных :&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="baseName">
-       <property name="text">
-        <string>nameBase</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="1" column="0">
     <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Вы пытаетесь открыть базу данных :&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="baseName">
+         <property name="text">
+          <string>nameBase</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
@@ -53,14 +53,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QTextEdit" name="passwordEntryField">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>31</height>
-          </size>
-         </property>
-        </widget>
+        <widget class="QLineEdit" name="passwordEntryField"/>
        </item>
       </layout>
      </item>

@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QMessageBox>
 
+#include "databasecontroller.h"
 #include "EnumWidgets.h"
 
 namespace Ui {
@@ -18,14 +19,20 @@ public:
     explicit UnlockBaseWindow(QWidget *parent = nullptr);
     ~UnlockBaseWindow();
 
+public slots:
+    void receiveFilePath(const QString& filePath);
+
 signals:
-    void transmitMainWindow(int index);
+    void transmitChangeToMainWindow(int index);
+    void transmitDataBasePath(QString filePath);
 
 private slots:
     void on_unlockBaseButton_clicked();
+    void clear_all();
 
 private:
     Ui::UnlockBaseWindow *ui;
+    QString filePath, passwordEntry;
 };
 
 #endif // UNLOCKBASEWIDGET_H

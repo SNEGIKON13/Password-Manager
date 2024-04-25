@@ -1,9 +1,8 @@
 #include "createbasewidget.h"
 #include "ui_createbasewidget.h"
 
-CreateBaseWidget::CreateBaseWidget(QWidget *parent)
-    : QDialog(parent)
-    , ui(new Ui::CreateBaseWidget)
+CreateBaseWidget::CreateBaseWidget(DataBaseController *dbc, QWidget* parent)
+    : QDialog(parent), ui(new Ui::CreateBaseWidget), dbc(dbc)
 {
     ui->setupUi(this);
 }
@@ -13,32 +12,32 @@ CreateBaseWidget::~CreateBaseWidget()
     delete ui;
 }
 
+void CreateBaseWidget::clear_all()
+{
+    baseName.clear();
+    basePassword.clear();
+    ui->baseName->clear();
+    ui->basePassword->clear();
+}
+
 void CreateBaseWidget::on_buttonBox_accepted()
 {
-
     baseName = ui->baseName->text();
     basePassword = ui->basePassword->text();
     if (!baseName.isEmpty() && !basePassword.isEmpty()) {
-        emit trasmitMainWindow(IndexMainWindow);
-        db = QSqlDatabase::addDatabase("QSQLITE");
-        db.setDatabaseName(baseName + ".db");
-        db.open();
-        queryRequest = "CREATE TABLE notes ("
-                       "id serial PRIMARY KEY,"
-                       "note_name VARCHAR(64) NOT NULL,"
-                       "login VARCHAR(64),"
-                       "url VARCHAR(64),"
-                       "password VARCHAR(64) NOT NULL,"
-                       "other_notes VARCHAR(500),"
-                       "last_modified TIMESTAMP"
-                       ")";
-        QSqlQuery query;
-        query.exec(queryRequest);
-        db.close();
+        QString filePath = QFileDialog::getSaveFileName(this, "Сохранить базу данных",
+            QDir::homePath() + QDir::separator() + baseName, "База данных (*.db)");
+        if (!filePath.isEmpty()) {
+            dbc->createDatabase(filePath);
+        } else {
+            QMessageBox::warning(this, "Ошибка", "Ошибка при открытии базы данных");
+        }
+        clear_all();
         close();
     }
-    else {
-        QMessageBox::warning(this, "Ошибка", "Ошибка при создании базы данных!"
-                                             " Проверьте ввод!");
-    }
+}
+
+void CreateBaseWidget::on_buttonBox_rejected()
+{
+    clear_all();
 }

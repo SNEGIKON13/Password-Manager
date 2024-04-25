@@ -3,12 +3,13 @@
 
 #include <QDialog>
 #include <QMessageBox>
+#include <QFileDialog>
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
 
 #include "EnumWidgets.h"
-#include "db_controller.h"
+#include "databasecontroller.h"
 
 namespace Ui {
 class CreateBaseWidget;
@@ -19,19 +20,18 @@ class CreateBaseWidget : public QDialog
     Q_OBJECT
 
 public:
-    explicit CreateBaseWidget(QWidget *parent = nullptr);
+     CreateBaseWidget(DataBaseController* dbc, QWidget* parent = nullptr);
     ~CreateBaseWidget();
-
-signals:
-    void trasmitMainWindow(int index);
 
 private slots:
     void on_buttonBox_accepted();
+    void clear_all();
+    void on_buttonBox_rejected();
 
 private:
     Ui::CreateBaseWidget *ui;
     QString baseName, basePassword, queryRequest;
-    QSqlDatabase db;
+    DataBaseController *dbc;
 
 };
 

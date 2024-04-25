@@ -10,21 +10,21 @@ CONFIG += c++17
 
 SOURCES += \
     addnewentrywidget.cpp \
-    aes256.cpp \
     createbasewidget.cpp \
-    db_controller.cpp \
+    databasecontroller.cpp \
     main.cpp \
     mainwindow.cpp \
+    settings_manager.cpp \
     unlockbasewidget.cpp \
     welcomewidget.cpp    
 
 HEADERS += \
     EnumWidgets.h \
     addnewentrywidget.h \
-    aes256.h \
     createbasewidget.h \
-    db_controller.h \
+    databasecontroller.h \
     mainwindow.h \
+    settings_manager.h \
     unlockbasewidget.h \
     welcomewidget.h
 

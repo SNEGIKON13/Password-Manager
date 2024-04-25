@@ -21,28 +21,42 @@
        <number>0</number>
       </property>
       <widget class="QWidget" name="pageBaseView">
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string>База данных сейчас</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>TextLabel</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QTableWidget" name="tableWidget"/>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QLabel" name="label">
+              <property name="maximumSize">
+               <size>
+                <width>281</width>
+                <height>21</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;База данных, которая открыта сейчас:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="baseName">
+              <property name="text">
+               <string>TextLabel</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QTableWidget" name="tableWidget"/>
+          </item>
+         </layout>
         </item>
        </layout>
-       <zorder>tableWidget</zorder>
-       <zorder>label</zorder>
-       <zorder>label_2</zorder>
       </widget>
      </widget>
     </item>
@@ -62,8 +76,7 @@
      <string>Базы данных</string>
     </property>
     <addaction name="actionCreateBase"/>
-    <addaction name="actionUnlockBase"/>
-    <addaction name="actionRecentBases"/>
+    <addaction name="actionChooseUnlockingBase"/>
     <addaction name="action_14"/>
     <addaction name="separator"/>
     <addaction name="action_15"/>
@@ -109,7 +122,7 @@
     <string>Создать базу данных</string>
    </property>
   </action>
-  <action name="actionUnlockBase">
+  <action name="actionChooseUnlockingBase">
    <property name="text">
     <string>Открыть базу данных</string>
    </property>

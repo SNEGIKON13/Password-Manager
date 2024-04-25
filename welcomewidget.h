@@ -2,7 +2,11 @@
 #define WELCOMEWIDGET_H
 
 #include <QWidget>
+#include <QFileDialog>
+#include <QListWidgetItem>
+#include <QMessageBox>
 
+#include "settings_manager.h"
 #include "EnumWidgets.h"
 
 namespace Ui {
@@ -17,18 +21,25 @@ public:
     explicit WelcomeWidget(QWidget *parent = nullptr);
     ~WelcomeWidget();
 
+public slots:
+    void showRecentDatabases();
+
 signals:
-    void trasmitUnlockBase(int index);
-    void trasmitCreateBase(int index);
+    void transmitFilePath(QString filePath);
+    void transmitChangeToUnlockBase(int index);
+    void transmitChangeToCreateBase(int index);
 
 private slots:
-
     void on_openExistBaseButton_clicked();
-
     void on_createBaseButton_clicked();
+
+    void on_listWidget_itemClicked(QListWidgetItem *item);
 
 private:
     Ui::WelcomeWidget *ui;
+    QString filePath;
+    QStringList recentDatabases;
+
 };
 
 #endif // WELCOMEWIDGET_H

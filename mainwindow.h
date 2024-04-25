@@ -8,6 +8,8 @@
 #include "unlockbasewidget.h"
 #include "createbasewidget.h"
 #include "addnewentrywidget.h"
+#include "settings_manager.h"
+#include "databasecontroller.h"
 #include "EnumWidgets.h"
 
 QT_BEGIN_NAMESPACE
@@ -26,9 +28,16 @@ public:
 
 public slots:
     void changeStackedWidgetIndex(int index);
+    void activatePopUpWidget(int index);
     void actionCreateBase();
-    void actionUnlockBase();
+    void actionChooseUnlockingBase();
     void actionAddNewEntry();
+    void receiveFilePath(const QString &fp);
+    void receivePossibleFilePath(const QString &fp);
+    void unlockBase();
+
+private slots:
+    void createBase();
 
 private:
     Ui::MainWindow *ui;
@@ -36,6 +45,9 @@ private:
     UnlockBaseWindow *_unlockBaseWidget;
     CreateBaseWidget *_createBaseWidget;
     AddNewEntryWidget *_addNewEntryWidget;
+    DataBaseController *_dbc;
+    QString filePath, possibleFilePath;
+    QStringList recentDatabases;
 
 };
 #endif // MAINWINDOW_H
