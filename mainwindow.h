@@ -32,12 +32,17 @@ public slots:
     void actionCreateBase();
     void actionChooseUnlockingBase();
     void actionAddNewEntry();
+    void actionQuiu();
     void receiveFilePath(const QString &fp);
     void receivePossibleFilePath(const QString &fp);
     void unlockBase();
 
 private slots:
     void createBase();
+
+    void saveNewFilePath();
+
+    void setDatabaseNameText();
 
 private:
     Ui::MainWindow *ui;
@@ -48,6 +53,7 @@ private:
     DataBaseController *_dbc;
     QString filePath, possibleFilePath;
     QStringList recentDatabases;
+
 
 };
 #endif // MAINWINDOW_H

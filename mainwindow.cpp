@@ -6,7 +6,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     _dbc = new DataBaseController(this);
-
     //Создание ui-форм
     _welcomeWidget = new WelcomeWidget(this);
     _welcomeWidget->showRecentDatabases();
@@ -27,6 +26,8 @@ MainWindow::MainWindow(QWidget *parent)
             this, &MainWindow::actionChooseUnlockingBase);
     connect(ui->actionAddNewEntry, &QAction::triggered,
             this, &MainWindow::actionAddNewEntry);
+    connect(ui->actionQuit, &QAction::triggered,
+            this, &MainWindow::actionQuiu);
 
     //Коннект Push_Buttons
     connect(_welcomeWidget, &WelcomeWidget::transmitChangeToUnlockBase,
@@ -60,11 +61,6 @@ void MainWindow::changeStackedWidgetIndex(int index)
     ui->stackedWidget->setCurrentIndex(index);
 }
 
-void MainWindow::createBase()
-{
-    _createBaseWidget->show();
-}
-
 void MainWindow::activatePopUpWidget(int index)
 {
     switch (index) {
@@ -79,20 +75,15 @@ void MainWindow::activatePopUpWidget(int index)
     }
 }
 
-void MainWindow::actionCreateBase()
-{
-     _createBaseWidget->show();
-}
-
 void MainWindow::unlockBase()
 {
     _unlockBaseWidget->receiveFilePath(possibleFilePath);
     _unlockBaseWidget->show();
 }
 
-void MainWindow::actionChooseUnlockingBase()
+void MainWindow::createBase()
 {
-    changeStackedWidgetIndex(IndexWelcomeWidget);
+    _createBaseWidget->show();
 }
 
 void MainWindow::receivePossibleFilePath(const QString &fp)
@@ -100,15 +91,9 @@ void MainWindow::receivePossibleFilePath(const QString &fp)
     possibleFilePath = fp;
 }
 
-void MainWindow::receiveFilePath(const QString &fp)
+void MainWindow::saveNewFilePath()
 {
-    filePath = fp;
-    ui->baseName->setText(filePath);
-
-    QFont font;
-    font.setPointSize(12);
-    ui->baseName->setFont(font);
-    //работа с БД
+    recentDatabases = SettingsManager::loadRecentDatabases();
     if (!filePath.isEmpty() && !recentDatabases.contains(filePath))
     {
         recentDatabases.prepend(filePath);
@@ -118,9 +103,40 @@ void MainWindow::receiveFilePath(const QString &fp)
     }
 }
 
+void MainWindow::setDatabaseNameText()
+{
+    ui->baseName->setText(filePath);
+    QFont font;
+    font.setPointSize(12);
+    ui->baseName->setFont(font);
+}
+
+void MainWindow::receiveFilePath(const QString &fp)
+{
+    filePath = fp;
+    setDatabaseNameText();
+    saveNewFilePath();
+}
+
 void MainWindow::actionAddNewEntry()
 {
     changeStackedWidgetIndex(IndexAddNewEntryWidget);
+}
+
+void MainWindow::actionCreateBase()
+{
+    _createBaseWidget->show();
+}
+
+void MainWindow::actionChooseUnlockingBase()
+{
+    changeStackedWidgetIndex(IndexWelcomeWidget);
+    _welcomeWidget->showRecentDatabases();
+}
+
+void MainWindow::actionQuiu()
+{
+    close();
 }
 
 

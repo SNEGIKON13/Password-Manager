@@ -82,7 +82,7 @@
     <addaction name="action_15"/>
     <addaction name="action_16"/>
     <addaction name="separator"/>
-    <addaction name="action_17"/>
+    <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuEntries">
     <property name="title">
@@ -172,7 +172,7 @@
     <string>Заблокировать базу данных</string>
    </property>
   </action>
-  <action name="action_17">
+  <action name="actionQuit">
    <property name="text">
     <string>Закрыть приложение</string>
    </property>

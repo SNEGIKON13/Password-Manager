@@ -28,11 +28,8 @@ void WelcomeWidget::on_createBaseButton_clicked()
     emit transmitChangeToCreateBase(IndexСreateBaseWidget);
 }
 
-void WelcomeWidget::showRecentDatabases()
+void WelcomeWidget::changeRecentDatabasesStatusText()
 {
-    recentDatabases = SettingsManager::loadRecentDatabases();
-    ui->listWidget->clear();
-    ui->listWidget->addItems(recentDatabases);
     if (!recentDatabases.isEmpty()) {
         QString text = "Ранее использованные базы данных:";
 
@@ -46,6 +43,13 @@ void WelcomeWidget::showRecentDatabases()
     }
 }
 
+void WelcomeWidget::showRecentDatabases()
+{
+    recentDatabases = SettingsManager::loadRecentDatabases();
+    ui->listWidget->clear();
+    ui->listWidget->addItems(recentDatabases);
+    changeRecentDatabasesStatusText();
+}
 
 void WelcomeWidget::on_listWidget_itemClicked(QListWidgetItem *item)
 {
@@ -63,4 +67,3 @@ void WelcomeWidget::on_listWidget_itemClicked(QListWidgetItem *item)
         ui->listWidget->addItems(recentDatabases);
     }
 }
-

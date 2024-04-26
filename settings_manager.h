@@ -16,6 +16,7 @@ public:
 private:
     static QString recentDatabasesKey;
     static QSettings settings;
+    // static QStringList recentDatabases;
 };
 
 #endif // SETTINGS_MANAGER_H
