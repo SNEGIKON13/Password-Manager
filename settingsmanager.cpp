@@ -1,4 +1,4 @@
-#include "settings_manager.h"
+#include "settingsmanager.h"
 
 QSettings SettingsManager::settings("config.ini", QSettings::IniFormat);
 

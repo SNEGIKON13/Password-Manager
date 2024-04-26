@@ -6,17 +6,24 @@
 #include <QSqlQuery>
 #include <QDebug>
 #include <QFileDialog>
+#include <QListWidget>
 #include <QMessageBox>
 
 #include "EnumWidgets.h"
+#include "NodeData.h"
 
 class DataBaseController : public QObject
 {
     Q_OBJECT
 public:
     explicit DataBaseController(QObject *parent = nullptr);
-    void createDatabase(const QString& filePath);
-    void createNotesTable();
+    void createDatabase(const QString &filePath);
+    void createQueryNotesTable();
+    void showDatabase(QListWidget *list);
+    void createNewNote(const NoteData &noteData);
+    void setFilePath(const QString &filePath);
+    bool openDatabase();
+    bool isEmptyFilePath();
 
 signals:
     // void transmitUnlockDataBase();
@@ -24,6 +31,7 @@ signals:
     void transmitChangeToMainWindow(int index);
 
 private:
+    QString filePath;
     QSqlDatabase db;
     QWidget *parentWidget;
 

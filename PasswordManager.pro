@@ -12,19 +12,22 @@ SOURCES += \
     addnewentrywidget.cpp \
     createbasewidget.cpp \
     databasecontroller.cpp \
+    editexistnotewidget.cpp \
     main.cpp \
     mainwindow.cpp \
-    settings_manager.cpp \
+    settingsmanager.cpp \
     unlockbasewidget.cpp \
     welcomewidget.cpp    
 
 HEADERS += \
     EnumWidgets.h \
+    NodeData.h \
     addnewentrywidget.h \
     createbasewidget.h \
     databasecontroller.h \
+    editexistnotewidget.h \
     mainwindow.h \
-    settings_manager.h \
+    settingsmanager.h \
     unlockbasewidget.h \
     welcomewidget.h
 
@@ -39,3 +42,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    toolBarImages.qrc

@@ -1,5 +1,5 @@
-#ifndef SETTINGS_MANAGER_H
-#define SETTINGS_MANAGER_H
+#ifndef SETTINGSMANAGER_H
+#define SETTINGSMANAGER_H
 
 #include <QStringList>
 #include <QFile>
@@ -19,4 +19,4 @@ private:
     // static QStringList recentDatabases;
 };
 
-#endif // SETTINGS_MANAGER_H
+#endif // SETTINGSMANAGER_H

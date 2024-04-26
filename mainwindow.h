@@ -2,13 +2,13 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QSqlDatabase>
+#include <QToolBar>
 
 #include "welcomewidget.h"
 #include "unlockbasewidget.h"
 #include "createbasewidget.h"
 #include "addnewentrywidget.h"
-#include "settings_manager.h"
+#include "settingsmanager.h"
 #include "databasecontroller.h"
 #include "EnumWidgets.h"
 
@@ -32,17 +32,17 @@ public slots:
     void actionCreateBase();
     void actionChooseUnlockingBase();
     void actionAddNewEntry();
-    void actionQuiu();
+    void actionQuit();
     void receiveFilePath(const QString &fp);
     void receivePossibleFilePath(const QString &fp);
     void unlockBase();
 
 private slots:
     void createBase();
-
     void saveNewFilePath();
-
+    void showDatabase();
     void setDatabaseNameText();
+    void ifMainWindowActivated();
 
 private:
     Ui::MainWindow *ui;
@@ -53,6 +53,7 @@ private:
     DataBaseController *_dbc;
     QString filePath, possibleFilePath;
     QStringList recentDatabases;
+    QToolBar *_toolbar;
 
 
 };

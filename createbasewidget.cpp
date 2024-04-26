@@ -30,7 +30,7 @@ void CreateBaseWidget::on_buttonBox_accepted()
         if (!filePath.isEmpty()) {
             dbc->createDatabase(filePath);
         } else {
-            QMessageBox::warning(this, "Ошибка", "Ошибка при открытии базы данных");
+            QMessageBox::warning(this, "Ошибка", "Ошибка при cоздании базы данных");
         }
         clear_all();
         close();

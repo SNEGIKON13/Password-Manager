@@ -6,12 +6,15 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     _dbc = new DataBaseController(this);
+    _toolbar = new QToolBar(this);
+    addToolBar(_toolbar);
+
     //Создание ui-форм
     _welcomeWidget = new WelcomeWidget(this);
     _welcomeWidget->showRecentDatabases();
     _unlockBaseWidget = new UnlockBaseWindow(this);
     _createBaseWidget = new CreateBaseWidget(_dbc, this);
-    _addNewEntryWidget = new AddNewEntryWidget(this);
+    _addNewEntryWidget = new AddNewEntryWidget(_dbc, this);
 
     //Добавление виджетов в стэк виджетов
     ui->setupUi(this);
@@ -27,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionAddNewEntry, &QAction::triggered,
             this, &MainWindow::actionAddNewEntry);
     connect(ui->actionQuit, &QAction::triggered,
-            this, &MainWindow::actionQuiu);
+            this, &MainWindow::actionQuit);
 
     //Коннект Push_Buttons
     connect(_welcomeWidget, &WelcomeWidget::transmitChangeToUnlockBase,
@@ -45,10 +48,17 @@ MainWindow::MainWindow(QWidget *parent)
     connect(_welcomeWidget, &WelcomeWidget::transmitFilePath,
             this, &MainWindow::receivePossibleFilePath);
     connect(_unlockBaseWidget, &UnlockBaseWindow::transmitDataBasePath,
-                this, &MainWindow::receiveFilePath);
+            this, &MainWindow::receiveFilePath);
     connect(_dbc, &DataBaseController::transmitFilePath,
             this, &MainWindow::receiveFilePath);
+    connect(_addNewEntryWidget, &AddNewEntryWidget::transmitChangeToMainWindow,
+            this, &MainWindow::changeStackedWidgetIndex);
 
+    //Добавление QAction в toolbar и их настройка
+    ui->actionAddNewEntry->setIcon(QIcon("://Images/CreateNewNote.png"));
+    ui->actionQuit->setIcon(QIcon("://Images/Quit.png"));
+    _toolbar->addAction(ui->actionAddNewEntry);
+    _toolbar->addAction(ui->actionQuit);
 }
 
 MainWindow::~MainWindow()
@@ -59,6 +69,7 @@ MainWindow::~MainWindow()
 void MainWindow::changeStackedWidgetIndex(int index)
 {
     ui->stackedWidget->setCurrentIndex(index);
+    ifMainWindowActivated();
 }
 
 void MainWindow::activatePopUpWidget(int index)
@@ -86,6 +97,12 @@ void MainWindow::createBase()
     _createBaseWidget->show();
 }
 
+void MainWindow::showDatabase()
+{
+    ui->listWidget->clear();
+    _dbc->showDatabase(ui->listWidget);
+}
+
 void MainWindow::receivePossibleFilePath(const QString &fp)
 {
     possibleFilePath = fp;
@@ -111,16 +128,27 @@ void MainWindow::setDatabaseNameText()
     ui->baseName->setFont(font);
 }
 
+void MainWindow::ifMainWindowActivated()
+{
+    showDatabase();
+}
+
 void MainWindow::receiveFilePath(const QString &fp)
 {
     filePath = fp;
     setDatabaseNameText();
     saveNewFilePath();
+    _dbc->setFilePath(fp);
 }
 
 void MainWindow::actionAddNewEntry()
 {
-    changeStackedWidgetIndex(IndexAddNewEntryWidget);
+    if (_dbc->isEmptyFilePath()) {
+        QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
+    }
+    else {
+        changeStackedWidgetIndex(IndexAddNewEntryWidget);
+    }
 }
 
 void MainWindow::actionCreateBase()
@@ -134,9 +162,7 @@ void MainWindow::actionChooseUnlockingBase()
     _welcomeWidget->showRecentDatabases();
 }
 
-void MainWindow::actionQuiu()
+void MainWindow::actionQuit()
 {
     close();
 }
-
-

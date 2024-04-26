@@ -6,7 +6,7 @@
 #include <QListWidgetItem>
 #include <QMessageBox>
 
-#include "settings_manager.h"
+#include "settingsmanager.h"
 #include "EnumWidgets.h"
 
 namespace Ui {
