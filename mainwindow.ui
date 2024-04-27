@@ -103,7 +103,7 @@
      <string>Записи</string>
     </property>
     <addaction name="actionAddNewEntry"/>
-    <addaction name="action_5"/>
+    <addaction name="actionChangeNote"/>
     <addaction name="action_6"/>
     <addaction name="separator"/>
     <addaction name="action_11"/>
@@ -146,7 +146,7 @@
     <string>Создать запись</string>
    </property>
   </action>
-  <action name="action_5">
+  <action name="actionChangeNote">
    <property name="text">
     <string>Изменить запись</string>
    </property>

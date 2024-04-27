@@ -6,8 +6,9 @@ enum WidgetIndex
     IndexMainWindow = 0,
     IndexWelcomeWidget = 1,
     IndexAddNewEntryWidget = 2,
-    IndexСreateBaseWidget = 3,
-    IndexUnlockBaseWidget = 4,
+    IndexEditExistEntryWidget = 3,
+    IndexСreateBaseWidget = 4,
+    IndexUnlockBaseWidget = 5,
 };
 
 #endif // ENUMWIDGETS_H

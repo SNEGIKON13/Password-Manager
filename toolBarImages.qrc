@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>Images/CreateNewNote.png</file>
         <file>Images/Quit.png</file>
+        <file>Images/ChangeExistNote.png</file>
     </qresource>
 </RCC>

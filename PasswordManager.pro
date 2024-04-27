@@ -12,7 +12,7 @@ SOURCES += \
     addnewentrywidget.cpp \
     createbasewidget.cpp \
     databasecontroller.cpp \
-    editexistnotewidget.cpp \
+    editexistentrywidget.cpp \
     main.cpp \
     mainwindow.cpp \
     settingsmanager.cpp \
@@ -25,7 +25,7 @@ HEADERS += \
     addnewentrywidget.h \
     createbasewidget.h \
     databasecontroller.h \
-    editexistnotewidget.h \
+    editexistentrywidget.h \
     mainwindow.h \
     settingsmanager.h \
     unlockbasewidget.h \
@@ -34,6 +34,7 @@ HEADERS += \
 FORMS += \
     addnewentrywidget.ui \
     createbasewidget.ui \
+    editexistentrywidget.ui \
     mainwindow.ui \
     unlockbasewidget.ui \
     welcomewidget.ui

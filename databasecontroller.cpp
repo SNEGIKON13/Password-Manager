@@ -30,18 +30,18 @@ void DataBaseController::createQueryNotesTable() {
                            "url VARCHAR(64),"
                            "password VARCHAR(64) NOT NULL,"
                            "other_notes VARCHAR(500),"
-                           "last_modified TIMESTAMP"
+                           "last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,,"
+                           "group_id INTEGER"
                            ")";
-    query.exec(queryRequest);
 }
 
-void DataBaseController::showDatabase(QListWidget *list)
+void DataBaseController::showDatabasesGroups(QListWidget *list)
 {
     if (!openDatabase()) {
         return;
     }
 
-    QSqlQuery query("SELECT note_name FROM notes", db);
+    QSqlQuery query("SELECT group_id FROM notes", db);
 
     while (query.next()) {
         QString noteName = query.value(0).toString();
@@ -55,13 +55,15 @@ void DataBaseController::createNewNote(const NoteData &noteData)
 {
     openDatabase();
     QSqlQuery query;
-    QString insertQuery = "INSERT INTO notes (note_name, login, url, password, other_notes) VALUES (:noteName, :login, :url, :password, :otherNotes)";
+    QString insertQuery = "INSERT INTO notes (note_name, login, url, password, other_notes, group_id)"
+                          " VALUES (:noteName, :login, :url, :password, :otherNotes, :groupid)";
     query.prepare(insertQuery);
     query.bindValue(":noteName", noteData.noteName);
     query.bindValue(":login", noteData.userName);
     query.bindValue(":url", noteData.url);
     query.bindValue(":password", noteData.passwordEntry);
     query.bindValue(":otherNotes", noteData.otherNotes);
+    query.bindValue(":groupid", noteData.group_id);
     query.exec();
     db.close();
 }

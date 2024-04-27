@@ -19,7 +19,7 @@ public:
     explicit DataBaseController(QObject *parent = nullptr);
     void createDatabase(const QString &filePath);
     void createQueryNotesTable();
-    void showDatabase(QListWidget *list);
+    void showDatabasesGroups(QListWidget *list);
     void createNewNote(const NoteData &noteData);
     void setFilePath(const QString &filePath);
     bool openDatabase();

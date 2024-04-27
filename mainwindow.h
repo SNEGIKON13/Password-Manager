@@ -8,6 +8,7 @@
 #include "unlockbasewidget.h"
 #include "createbasewidget.h"
 #include "addnewentrywidget.h"
+#include "editexistentrywidget.h"
 #include "settingsmanager.h"
 #include "databasecontroller.h"
 #include "EnumWidgets.h"
@@ -32,6 +33,7 @@ public slots:
     void actionCreateBase();
     void actionChooseUnlockingBase();
     void actionAddNewEntry();
+    void actionChangeNote();
     void actionQuit();
     void receiveFilePath(const QString &fp);
     void receivePossibleFilePath(const QString &fp);
@@ -40,7 +42,7 @@ public slots:
 private slots:
     void createBase();
     void saveNewFilePath();
-    void showDatabase();
+    void showDatabasesGroups();
     void setDatabaseNameText();
     void ifMainWindowActivated();
 
@@ -50,6 +52,7 @@ private:
     UnlockBaseWindow *_unlockBaseWidget;
     CreateBaseWidget *_createBaseWidget;
     AddNewEntryWidget *_addNewEntryWidget;
+    EditExistEntryWidget *_editExistEntryWidget;
     DataBaseController *_dbc;
     QString filePath, possibleFilePath;
     QStringList recentDatabases;

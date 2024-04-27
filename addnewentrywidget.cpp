@@ -19,6 +19,8 @@ void AddNewEntryWidget::on_buttonBox_rejected()
 
 void AddNewEntryWidget::on_buttonBox_accepted()
 {
+    clearAll();
+
     if (ui->passwordEntry->text().isEmpty() && ui->noteName->text().isEmpty()) {
         QMessageBox::warning(this, "Ошибка", "Ввод названия записи и пароля обязателен!");
         return;
@@ -56,7 +58,25 @@ void AddNewEntryWidget::on_buttonBox_accepted()
         nd.otherNotes = "";
     }
 
+    clearAll();
+
     dbc->createNewNote(nd);
     emit transmitChangeToMainWindow(IndexMainWindow);
+}
+
+void AddNewEntryWidget::clearAll()
+{
+    nd.noteName.clear();
+    nd.userName.clear();
+    nd.url.clear();
+    nd.passwordEntry.clear();
+    nd.otherNotes.clear();
+    nd.group_id = 0;
+}
+
+
+void AddNewEntryWidget::on_chooseGroup_currentIndexChanged(int index)
+{
+    nd.group_id = index;
 }
 

@@ -9,6 +9,7 @@ struct NoteData {
     QString url;
     QString passwordEntry;
     QString otherNotes;
+    int group_id;
 };
 
 #endif // NODEDATA_H

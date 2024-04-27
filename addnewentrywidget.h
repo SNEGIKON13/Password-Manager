@@ -2,6 +2,7 @@
 #define ADDNEWENTRYWIDGET_H
 
 #include <QDialog>
+#include <QString>
 #include <QMessageBox>
 
 #include "EnumWidgets.h"
@@ -25,13 +26,18 @@ signals:
 
 private slots:
     void on_buttonBox_rejected();
-
     void on_buttonBox_accepted();
+    void clearAll();
+
+    void on_chooseGroup_currentIndexChanged(int index);
 
 private:
     Ui::AddNewEntryWidget *ui;
-    QString noteName, userName = nullptr, url = nullptr,
-        passwordEntry, otherNotes = nullptr;
+    QString noteName;
+    QString userName;
+    QString url;
+    QString passwordEntry;
+    QString otherNotes;
     DataBaseController *dbc;
     NoteData nd;
 

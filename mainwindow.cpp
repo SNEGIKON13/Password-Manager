@@ -15,11 +15,13 @@ MainWindow::MainWindow(QWidget *parent)
     _unlockBaseWidget = new UnlockBaseWindow(this);
     _createBaseWidget = new CreateBaseWidget(_dbc, this);
     _addNewEntryWidget = new AddNewEntryWidget(_dbc, this);
+    _editExistEntryWidget = new EditExistEntryWidget(_dbc, this);
 
     //Добавление виджетов в стэк виджетов
     ui->setupUi(this);
     ui->stackedWidget->insertWidget(1, _welcomeWidget);
     ui->stackedWidget->insertWidget(2, _addNewEntryWidget);
+    ui->stackedWidget->insertWidget(3, _editExistEntryWidget);
     ui->stackedWidget->setCurrentIndex(IndexWelcomeWidget);
 
     //Коннект QAction
@@ -31,6 +33,8 @@ MainWindow::MainWindow(QWidget *parent)
             this, &MainWindow::actionAddNewEntry);
     connect(ui->actionQuit, &QAction::triggered,
             this, &MainWindow::actionQuit);
+    connect(ui->actionChangeNote, &QAction::triggered,
+            this, &MainWindow::actionChangeNote);
 
     //Коннект Push_Buttons
     connect(_welcomeWidget, &WelcomeWidget::transmitChangeToUnlockBase,
@@ -57,8 +61,10 @@ MainWindow::MainWindow(QWidget *parent)
     //Добавление QAction в toolbar и их настройка
     ui->actionAddNewEntry->setIcon(QIcon("://Images/CreateNewNote.png"));
     ui->actionQuit->setIcon(QIcon("://Images/Quit.png"));
+    ui->actionChangeNote->setIcon(QIcon("://Images/ChangeExistNote.png"));
     _toolbar->addAction(ui->actionAddNewEntry);
     _toolbar->addAction(ui->actionQuit);
+    _toolbar->addAction(ui->actionChangeNote);
 }
 
 MainWindow::~MainWindow()
@@ -97,10 +103,10 @@ void MainWindow::createBase()
     _createBaseWidget->show();
 }
 
-void MainWindow::showDatabase()
+void MainWindow::showDatabasesGroups()
 {
     ui->listWidget->clear();
-    _dbc->showDatabase(ui->listWidget);
+    _dbc->showDatabasesGroups(ui->listWidget);
 }
 
 void MainWindow::receivePossibleFilePath(const QString &fp)
@@ -130,7 +136,7 @@ void MainWindow::setDatabaseNameText()
 
 void MainWindow::ifMainWindowActivated()
 {
-    showDatabase();
+    showDatabasesGroups();
 }
 
 void MainWindow::receiveFilePath(const QString &fp)
@@ -148,6 +154,16 @@ void MainWindow::actionAddNewEntry()
     }
     else {
         changeStackedWidgetIndex(IndexAddNewEntryWidget);
+    }
+}
+
+void MainWindow::actionChangeNote()
+{
+    if (_dbc->isEmptyFilePath()) {
+        QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
+    }
+    else {
+        changeStackedWidgetIndex(IndexEditExistEntryWidget);
     }
 }
 
