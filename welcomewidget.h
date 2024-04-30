@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QListWidgetItem>
 #include <QMessageBox>
+#include <QStandardPaths>
 
 #include "settingsmanager.h"
 #include "EnumWidgets.h"
@@ -32,10 +33,9 @@ signals:
 private slots:
     void on_openExistBaseButton_clicked();
     void on_createBaseButton_clicked();
-
     void on_listWidget_itemClicked(QListWidgetItem *item);
-
     void changeRecentDatabasesStatusText();
+    void on_deleteAllNonExistDb_clicked();
 
 private:
     Ui::WelcomeWidget *ui;

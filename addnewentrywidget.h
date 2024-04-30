@@ -21,15 +21,19 @@ public:
     AddNewEntryWidget(DataBaseController *dbc, QWidget *parent = nullptr);
     ~AddNewEntryWidget();
 
+public slots:
+    void populateGroupComboBox();
+
 signals:
     void transmitChangeToMainWindow(int index);
 
 private slots:
     void on_buttonBox_rejected();
     void on_buttonBox_accepted();
-    void clearAll();
-
     void on_chooseGroup_currentIndexChanged(int index);
+    void clearUiText();
+    void clearStruct();
+    void clearAll();
 
 private:
     Ui::AddNewEntryWidget *ui;

@@ -10,9 +10,11 @@ CONFIG += c++17
 
 SOURCES += \
     addnewentrywidget.cpp \
+    addnewgroupwidget.cpp \
     createbasewidget.cpp \
     databasecontroller.cpp \
     editexistentrywidget.cpp \
+    editexistgroupwidget.cpp \
     main.cpp \
     mainwindow.cpp \
     settingsmanager.cpp \
@@ -21,11 +23,14 @@ SOURCES += \
 
 HEADERS += \
     EnumWidgets.h \
+    GroupData.h \
     NodeData.h \
     addnewentrywidget.h \
+    addnewgroupwidget.h \
     createbasewidget.h \
     databasecontroller.h \
     editexistentrywidget.h \
+    editexistgroupwidget.h \
     mainwindow.h \
     settingsmanager.h \
     unlockbasewidget.h \
@@ -33,8 +38,10 @@ HEADERS += \
 
 FORMS += \
     addnewentrywidget.ui \
+    addnewgroupwidget.ui \
     createbasewidget.ui \
     editexistentrywidget.ui \
+    editexistgroupwidget.ui \
     mainwindow.ui \
     unlockbasewidget.ui \
     welcomewidget.ui

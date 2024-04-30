@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QString>
 #include <QMessageBox>
+#include <QTableWidgetItem>
 
 #include "EnumWidgets.h"
 #include "NodeData.h"
@@ -20,25 +21,29 @@ class EditExistEntryWidget : public QDialog
 public:
     explicit EditExistEntryWidget(DataBaseController *dbc, QWidget *parent = nullptr);
     ~EditExistEntryWidget();
+    void setNoteName(const QString &noteName, const QString &groupName);
+    void populateGroupComboBox();
+    void toFillFields();
 
 signals:
-    // void transmitChangeToMainWindow(int index);
+    void transmitChangeToMainWindow(int index);
 
 private slots:
-    // void on_buttonBox_rejected();
-    // void on_buttonBox_accepted();
-    // void clearAll();
-    void toFillFields();
+    void on_buttonBox_accepted();
+    void on_buttonBox_rejected();
+    void clearAllExceptId();
 
 private:
     Ui::EditExistEntryWidget *ui;
     QString noteName;
+    QString groupName;
     QString userName;
     QString url;
     QString passwordEntry;
     QString otherNotes;
     DataBaseController *dbc;
     NoteData nd;
+    QTableWidgetItem *selectedNote;
 };
 
 #endif // EDITEXISTENTRYWIDGET_H

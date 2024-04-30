@@ -108,19 +108,14 @@
        <item>
         <widget class="QComboBox" name="chooseGroup">
          <property name="currentText">
-          <string>Стандартная группа</string>
+          <string/>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>-1</number>
          </property>
          <property name="placeholderText">
           <string>Выберите группу</string>
          </property>
-         <item>
-          <property name="text">
-           <string>Стандартная группа</string>
-          </property>
-         </item>
         </widget>
        </item>
        <item>

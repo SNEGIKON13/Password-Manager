@@ -26,9 +26,11 @@ void CreateBaseWidget::on_buttonBox_accepted()
     basePassword = ui->basePassword->text();
     if (!baseName.isEmpty() && !basePassword.isEmpty()) {
         QString filePath = QFileDialog::getSaveFileName(this, "Сохранить базу данных",
-            QDir::homePath() + QDir::separator() + baseName, "База данных (*.db)");
+            QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) +
+            QDir::separator() + baseName, "База данных (*.db)");
         if (!filePath.isEmpty()) {
-            dbc->createDatabase(filePath);
+            dbc->setFilePath(filePath);
+            dbc->createDatabase();
         } else {
             QMessageBox::warning(this, "Ошибка", "Ошибка при cоздании базы данных");
         }

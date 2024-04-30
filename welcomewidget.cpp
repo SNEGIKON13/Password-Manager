@@ -16,7 +16,7 @@ WelcomeWidget::~WelcomeWidget()
 void WelcomeWidget::on_openExistBaseButton_clicked()
 {
     filePath = QFileDialog::getOpenFileName(this, "Открыть базу данных",
-            QDir::homePath(), "База данных (*.db)");
+            QStandardPaths::writableLocation(QStandardPaths::DesktopLocation), "База данных (*.db)");
     if (!filePath.isEmpty()) {
         emit transmitFilePath(filePath);
         emit transmitChangeToUnlockBase(IndexUnlockBaseWidget);
@@ -67,3 +67,17 @@ void WelcomeWidget::on_listWidget_itemClicked(QListWidgetItem *item)
         ui->listWidget->addItems(recentDatabases);
     }
 }
+
+void WelcomeWidget::on_deleteAllNonExistDb_clicked()
+{
+    for (int i = 0; i < ui->listWidget->count(); ++i) {
+        QString itemText = ui->listWidget->item(i)->text();
+        QFile databaseFile(itemText);
+        if (!databaseFile.exists()) {
+            recentDatabases = SettingsManager::deleteOneListItem(itemText);
+            ui->listWidget->clear();
+            ui->listWidget->addItems(recentDatabases);
+        }
+    }
+}
+

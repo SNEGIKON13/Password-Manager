@@ -7,6 +7,7 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QStandardPaths>
 
 #include "EnumWidgets.h"
 #include "databasecontroller.h"
