@@ -4,7 +4,7 @@ DatabaseController::DatabaseController(QObject *parent)
     : QObject{parent}
 {}
 
-QString DatabaseController::filePath = "";
+QString DatabaseController::filePath;
 
 QMap<int, QString> DatabaseController::getGroupNames()
 {

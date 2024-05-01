@@ -12,25 +12,51 @@ EditExistGroupWidget::~EditExistGroupWidget()
     delete ui;
 }
 
+void EditExistGroupWidget::setGroupName(const QString &groupName)
+{
+    this->groupName = groupName;
+}
+
 void EditExistGroupWidget::on_buttonBox_accepted()
 {
-    // databaseGroupEditor->selectNoteData(nd, 1);
-    // ui->groupName->setText(gd.groupName);
-    // ui->otherNotesForGroup->setText(gd.otherNotes);
+    clearAllExceptId();
+    if (ui->groupName->text().isEmpty()) {
+        QMessageBox::warning(this, "Ошибка", "Ввод названия группы обязателен");
+        return;
+    }
+    else {
+        gd.groupName = ui->groupName->text();
+    }
+
+    if (!ui->otherNotesForGroup->toPlainText().isEmpty()) {
+        gd.otherNotes = ui->otherNotesForGroup->toPlainText();
+    } else {
+        gd.otherNotes = "";
+    }
+
+    databaseGroupEditor->updateGroup(gd);
+    emit transmitChangedGroupName(gd.groupName);
+    emit transmitChangeToMainWindow(IndexMainWindow);
+    clearAllExceptId();
+
 }
 
 
 void EditExistGroupWidget::on_buttonBox_rejected()
 {
-
+    clearAllExceptId();
+    emit transmitChangeToMainWindow(IndexMainWindow);
 }
 
-void EditExistGroupWidget::clearAll()
+void EditExistGroupWidget::clearAllExceptId()
 {
-
+    gd.groupName.clear();
+    gd.otherNotes.clear();
 }
 
 void EditExistGroupWidget::toFillFields()
 {
-
+    databaseGroupEditor->selectGroupData(gd, groupName);
+    ui->groupName->setText(gd.groupName);
+    ui->otherNotesForGroup->setText(gd.otherNotes);
 }

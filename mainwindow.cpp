@@ -36,7 +36,7 @@ void MainWindow::MWC_InsertStackedWidgets()
     ui->stackedWidget->setCurrentIndex(IndexWelcomeWidget);
 }
 
-void MainWindow::MWC_CreationOfUiForms()
+void MainWindow::MWC_CreationOfDatabaseControllers()
 {
     _dbc = new DatabaseController(this);
     _databaseNotesCreator = new DatabaseNotesCreator(this);
@@ -45,7 +45,12 @@ void MainWindow::MWC_CreationOfUiForms()
     _databaseGroupsEditor = new DatabaseGroupsEditor(this);
     _databaseCreator = new DatabaseCreator(_databaseGroupsCreator, this);
     _databaseDisplay = new DatabaseDisplay(this);
+    _databaseNotesRemover = new DatabaseNotesRemover(this);
+    _databaseGroupsRemover = new DatabaseGroupsRemover(this);
+}
 
+void MainWindow::MWC_CreationOfUiForms()
+{
     _welcomeWidget = new WelcomeWidget(this);
     _welcomeWidget->showRecentDatabases();
     _unlockBaseWidget = new UnlockBaseWindow(this);
@@ -86,12 +91,42 @@ void MainWindow::MWC_ConnectsOther()
             this, &MainWindow::changeStackedWidgetIndex);
     connect(_editExistGroupWidget, &EditExistGroupWidget::transmitChangeToMainWindow,
             this, &MainWindow::changeStackedWidgetIndex);
+    connect(_editExistGroupWidget, &EditExistGroupWidget::transmitChangedGroupName,
+            this, &MainWindow::receiveNewNameOfGroup);
 }
 
 void MainWindow::MWC_CreationOfToolBar()
 {
     _toolbar = new QToolBar(this);
     QSize iconSize(48, 48);
+
+    QFrame* separator1 = new QFrame();
+    separator1->setFrameShape(QFrame::VLine);
+    separator1->setFrameShadow(QFrame::Sunken);
+    separator1->setLineWidth(2);
+    separator1->setMidLineWidth(0);
+    separator1->setStyleSheet("background-color: gray;");
+
+    QFrame* separator2 = new QFrame();
+    separator2->setFrameShape(QFrame::VLine);
+    separator2->setFrameShadow(QFrame::Sunken);
+    separator2->setLineWidth(2);
+    separator2->setMidLineWidth(0);
+    separator2->setStyleSheet("background-color: gray;");
+
+    QFrame* separator3 = new QFrame();
+    separator3->setFrameShape(QFrame::VLine);
+    separator3->setFrameShadow(QFrame::Sunken);
+    separator3->setLineWidth(2);
+    separator3->setMidLineWidth(0);
+    separator3->setStyleSheet("background-color: gray;");
+
+    QWidget* spacer1 = new QWidget();
+    spacer1->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+
+    QWidget* spacer2 = new QWidget();
+    spacer2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+
     addToolBar(_toolbar);
     _toolbar->setIconSize(iconSize);
     _toolbar->setMovable(false);
@@ -103,6 +138,9 @@ void MainWindow::MWC_CreationOfToolBar()
     _toolbar->addAction(ui->actionLockDatabase_2);
     ui->actionLockDatabase_2->setIcon(QIcon("://Images/LockDatabase.png"));
 
+    _toolbar->addWidget(spacer1);
+    _toolbar->addWidget(separator1);
+
     _toolbar->addAction(ui->actionCreateNewNote);
     ui->actionCreateNewNote->setIcon(QIcon("://Images/CreateNewNote.png"));
     _toolbar->addAction(ui->actionChangeNote);
@@ -110,26 +148,34 @@ void MainWindow::MWC_CreationOfToolBar()
     _toolbar->addAction(ui->actionDeleteNote);
     ui->actionDeleteNote->setIcon(QIcon("://Images/DeleteNote.png"));
 
+    _toolbar->addWidget(spacer2);
+    _toolbar->addWidget(separator2);
+    _toolbar->addWidget(spacer2);
+
     _toolbar->addAction(ui->actionCreateGroup);
     ui->actionCreateGroup->setIcon(QIcon("://Images/CreateGroup.png"));
     _toolbar->addAction(ui->actionChangeGroup);
     ui->actionChangeGroup->setIcon(QIcon("://Images/ChangeGroup.png"));
     _toolbar->addAction(ui->actionDeleteGroup);
     ui->actionDeleteGroup->setIcon(QIcon("://Images/DeleteGroup.png"));
+
+    _toolbar->addWidget(spacer1);
+    _toolbar->addWidget(separator3);
+    _toolbar->addWidget(spacer1);
+
     _toolbar->addAction(ui->actionSort);
     ui->actionSort->setIcon(QIcon("://Images/Sort.png"));
-
     _toolbar->addAction(ui->actionAboutProgram);
     ui->actionAboutProgram->setIcon(QIcon("://Images/About.png"));
     _toolbar->addAction(ui->actionQuit);
     ui->actionQuit->setIcon(QIcon("://Images/Quit.png"));
-
 }
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    MWC_CreationOfDatabaseControllers();
     MWC_CreationOfUiForms();
     MWC_InsertStackedWidgets();
     MWC_ConnectOfQActions();
@@ -146,7 +192,13 @@ MainWindow::~MainWindow()
 void MainWindow::changeStackedWidgetIndex(int index)
 {
     ui->stackedWidget->setCurrentIndex(index);
-    ifMainWindowActivated();
+    if (counterOfMWActivations == 0 && ui->stackedWidget->currentIndex() == IndexMainWindow) {
+        firstStartOfMainWindow();
+        counterOfMWActivations++;
+    }
+    else {
+        ifMainWindowActivated();
+    }
 }
 
 void MainWindow::activatePopUpWidget(int index)
@@ -219,11 +271,50 @@ void MainWindow::setDatabaseNameText()
     ui->baseName->setFont(font);
 }
 
+void MainWindow::setIndexOfNewNameGroup()
+{
+    QListWidgetItem* targetItem = nullptr;
+    for (int row = 0; row < ui->groupListWidget->count(); ++row) {
+        QListWidgetItem* item = ui->groupListWidget->item(row);
+        if (item->text() == groupName) {
+            targetItem = item;
+            break;
+        }
+    }
+
+    if (targetItem != nullptr) {
+        ui->groupListWidget->setCurrentItem(targetItem);
+    }
+}
+
+void MainWindow::setDefaultGroupNameOnStart()
+{
+    QMap<int, QString> groupNames = _dbc->getGroupNames();
+    if (!groupNames.isEmpty()) {
+        int firstGroupId = groupNames.firstKey();
+        groupName = groupNames.value(firstGroupId);
+    }
+}
+
 void MainWindow::ifMainWindowActivated()
 {
     if (ui->stackedWidget->currentIndex() == IndexMainWindow) {
         showDatabasesGroups();
         adjustTableWidget();
+        setIndexOfNewNameGroup();
+        _databaseDisplay->showNotesByGroupName(ui->notesTableWidget, groupName);
+        _addNewEntryWidget->populateGroupComboBox();
+        _editExistEntryWidget->populateGroupComboBox();
+    }
+}
+
+void MainWindow::firstStartOfMainWindow()
+{
+    if (ui->stackedWidget->currentIndex() == IndexMainWindow) {
+        showDatabasesGroups();
+        adjustTableWidget();
+        setDefaultGroupNameOnStart();
+        setIndexOfNewNameGroup();
         _databaseDisplay->showNotesByGroupName(ui->notesTableWidget, groupName);
         _addNewEntryWidget->populateGroupComboBox();
         _editExistEntryWidget->populateGroupComboBox();
@@ -238,7 +329,10 @@ void MainWindow::receiveFilePath(const QString &fp)
     DatabaseController::setFilePath(fp);
 }
 
-
+void MainWindow::receiveNewNameOfGroup(const QString &gn)
+{
+    groupName = gn;
+}
 
 
 
@@ -253,21 +347,28 @@ void MainWindow::actionCreateNewNote()
     }
 }
 
+QString MainWindow::selectedTableItem()
+{
+    QList<QTableWidgetItem*> selectedItems = ui->notesTableWidget->selectedItems();
+    if (!selectedItems.isEmpty()) {
+        QTableWidgetItem* selectedItem = selectedItems.first();
+        return selectedItem->text();;
+    } else {
+        QMessageBox::warning(this, "Ошибка", "Выберите запись для изменения!");
+    }
+
+}
+
 void MainWindow::actionChangeNote()
 {
     if (_dbc->isEmptyFilePath()) {
         QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
     }
-    QList<QTableWidgetItem*> selectedItems = ui->notesTableWidget->selectedItems();
-    if (!selectedItems.isEmpty()) {
-        QTableWidgetItem* selectedItem = selectedItems.first();
-        QString itemName = selectedItem->text();
+    else {
+        QString itemName = selectedTableItem();
         _editExistEntryWidget->setNoteName(itemName, groupName);
         _editExistEntryWidget->toFillFields();
         changeStackedWidgetIndex(IndexEditExistEntryWidget);
-    }
-    else {
-        QMessageBox::warning(this, "Ошибка", "Выберите запись для изменения!");
     }
 }
 
@@ -276,6 +377,10 @@ void MainWindow::actionDeleteNote()
     if (_dbc->isEmptyFilePath()) {
         QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
         //TODO
+    }
+    else {
+        QString itemName = selectedTableItem();
+        _databaseNotesRemover->deleteNote();
     }
 }
 
@@ -289,12 +394,27 @@ void MainWindow::actionCreateGroup()
     }
 }
 
+QString MainWindow::selectedListItem()
+{
+    QList<QListWidgetItem*> selectedItems = ui->groupListWidget->selectedItems();
+    if (!selectedItems.isEmpty()) {
+        QListWidgetItem* selectedItem = selectedItems.first();
+        return selectedItem->text();
+    }
+    else {
+        QMessageBox::warning(this, "Ошибка", "Выберите группу для изменения!");
+    }
+}
+
 void MainWindow::actionChangeGroup()
 {
     if (_dbc->isEmptyFilePath()) {
         QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
     }
     else {
+        QString itemName = selectedListItem();
+        _editExistGroupWidget->setGroupName(itemName);
+        _editExistGroupWidget->toFillFields();
         changeStackedWidgetIndex(IndexEditExistGroupWidget);
     }
 }
@@ -304,6 +424,9 @@ void MainWindow::actionDeleteGroup()
     if (_dbc->isEmptyFilePath()) {
         QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
         //TODO
+    }
+    else {
+        _databaseGroupsRemover->deleteGroup();
     }
 }
 
@@ -330,7 +453,6 @@ void MainWindow::actionQuit()
 {
     close();
 }
-
 
 void MainWindow::on_groupListWidget_itemClicked(QListWidgetItem *item)
 {

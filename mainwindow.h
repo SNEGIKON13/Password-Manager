@@ -20,6 +20,8 @@
 #include "dbmanagement/databasegroupscreator.h"
 #include "dbmanagement/databasegroupseditor.h"
 #include "dbmanagement/databasedisplay.h"
+#include "dbmanagement/databasenotesremover.h"
+#include "dbmanagement/databasegroupsremover.h"
 
 
 #include "EnumWidgets.h"
@@ -52,6 +54,7 @@ public slots:
     void actionDeleteGroup();
     void actionSort();
     void actionQuit();
+    void receiveNewNameOfGroup(const QString &gn);
     void receiveFilePath(const QString &fp);
     void receivePossibleFilePath(const QString &fp);
     void unlockBase();
@@ -72,6 +75,14 @@ private slots:
     void MWC_CreationOfToolBar();
 
     void on_groupListWidget_itemClicked(QListWidgetItem *item);
+    void setIndexOfNewNameGroup();
+    void setDefaultGroupNameOnStart();
+    void firstStartOfMainWindow();
+
+    QString selectedTableItem();
+    QString selectedListItem();
+
+    void MWC_CreationOfDatabaseControllers();
 
 private:
     Ui::MainWindow *ui;
@@ -90,6 +101,8 @@ private:
     DatabaseGroupsCreator *_databaseGroupsCreator;
     DatabaseGroupsEditor *_databaseGroupsEditor;
     DatabaseDisplay *_databaseDisplay;
+    DatabaseNotesRemover *_databaseNotesRemover;
+    DatabaseGroupsRemover *_databaseGroupsRemover;
 
     QString filePath, possibleFilePath;
     QStringList recentDatabases;
@@ -97,6 +110,7 @@ private:
     QStringList headerLabels
         = {"Название записи", "Имя пользователя", "URL-адрес", "Заметки", "Время изменения"};
     QString groupName = "PasswordManager";
+    int counterOfMWActivations = 0;
 
 };
 #endif // MAINWINDOW_H

@@ -4,6 +4,7 @@
 #include <QString>
 
 struct GroupData {
+    int id;
     QString groupName;
     QString otherNotes;
 };

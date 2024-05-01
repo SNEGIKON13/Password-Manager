@@ -17,8 +17,10 @@ SOURCES += \
     dbmanagement/databasedisplay.cpp \
     dbmanagement/databasegroupscreator.cpp \
     dbmanagement/databasegroupseditor.cpp \
+    dbmanagement/databasegroupsremover.cpp \
     dbmanagement/databasenotescreator.cpp \
     dbmanagement/databasenoteseditor.cpp \
+    dbmanagement/databasenotesremover.cpp \
     editexistentrywidget.cpp \
     editexistgroupwidget.cpp \
     main.cpp \
@@ -39,8 +41,10 @@ HEADERS += \
     dbmanagement/databasedisplay.h \
     dbmanagement/databasegroupscreator.h \
     dbmanagement/databasegroupseditor.h \
+    dbmanagement/databasegroupsremover.h \
     dbmanagement/databasenotescreator.h \
     dbmanagement/databasenoteseditor.h \
+    dbmanagement/databasenotesremover.h \
     editexistentrywidget.h \
     editexistgroupwidget.h \
     mainwindow.h \

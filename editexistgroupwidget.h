@@ -20,22 +20,23 @@ class EditExistGroupWidget : public QDialog
 public:
     explicit EditExistGroupWidget(DatabaseGroupsEditor *databaseGroupEditor, QWidget *parent = nullptr);
     ~EditExistGroupWidget();
+    void setGroupName(const QString &groupName);
+    void toFillFields();
 
 signals:
     void transmitChangeToMainWindow(int index);
+    void transmitChangedGroupName(QString newName);
 
 private slots:
-    void toFillFields();
-    void clearAll();
-
+    void clearAllExceptId();
     void on_buttonBox_accepted();
-
     void on_buttonBox_rejected();
 
 private:
     Ui::EditExistGroupWidget *ui;
     DatabaseGroupsEditor *databaseGroupEditor;
     GroupData gd;
+    QString groupName;
 
 };
 

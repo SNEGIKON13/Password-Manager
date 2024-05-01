@@ -81,16 +81,6 @@ void EditExistEntryWidget::on_buttonBox_rejected()
     emit transmitChangeToMainWindow(IndexMainWindow);
 }
 
-void EditExistEntryWidget::clearAllExceptId()
-{
-    nd.noteName.clear();
-    nd.userName.clear();
-    nd.url.clear();
-    nd.passwordEntry.clear();
-    nd.otherNotes.clear();
-    nd.group_id = 1;
-}
-
 void EditExistEntryWidget::setNoteName(const QString &noteName, const QString &groupName)
 {
     this->noteName = noteName;
@@ -109,3 +99,12 @@ void EditExistEntryWidget::populateGroupComboBox()
     ui->chooseGroup->setCurrentIndex(0);
 }
 
+void EditExistEntryWidget::clearAllExceptId()
+{
+    nd.noteName.clear();
+    nd.userName.clear();
+    nd.url.clear();
+    nd.passwordEntry.clear();
+    nd.otherNotes.clear();
+    nd.group_id = 1;
+}
