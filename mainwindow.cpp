@@ -38,15 +38,22 @@ void MainWindow::MWC_InsertStackedWidgets()
 
 void MainWindow::MWC_CreationOfUiForms()
 {
-    _dbc = new DataBaseController(this);
+    _dbc = new DatabaseController(this);
+    _databaseNotesCreator = new DatabaseNotesCreator(this);
+    _databaseNotesEditor = new DatabaseNotesEditor(this);
+    _databaseGroupsCreator = new DatabaseGroupsCreator(this);
+    _databaseGroupsEditor = new DatabaseGroupsEditor(this);
+    _databaseCreator = new DatabaseCreator(_databaseGroupsCreator, this);
+    _databaseDisplay = new DatabaseDisplay(this);
+
     _welcomeWidget = new WelcomeWidget(this);
     _welcomeWidget->showRecentDatabases();
     _unlockBaseWidget = new UnlockBaseWindow(this);
-    _createBaseWidget = new CreateBaseWidget(_dbc, this);
-    _addNewEntryWidget = new AddNewEntryWidget(_dbc, this);
-    _editExistEntryWidget = new EditExistEntryWidget(_dbc, this);
-    _addNewGroupWidget = new AddNewGroupWidget(_dbc, this);
-    _editExistGroupWidget = new EditExistGroupWidget(_dbc, this);
+    _createBaseWidget = new CreateBaseWidget(_databaseCreator, this);
+    _addNewEntryWidget = new AddNewEntryWidget(_databaseNotesCreator, this);
+    _editExistEntryWidget = new EditExistEntryWidget(_databaseNotesEditor, this);
+    _addNewGroupWidget = new AddNewGroupWidget(_databaseGroupsCreator, this);
+    _editExistGroupWidget = new EditExistGroupWidget(_databaseGroupsEditor, this);
 }
 
 void MainWindow::MWC_ConnectOfPushButtons()
@@ -57,7 +64,7 @@ void MainWindow::MWC_ConnectOfPushButtons()
             this, &MainWindow::activatePopUpWidget);
     connect(_welcomeWidget, &WelcomeWidget::transmitChangeToUnlockBase,
             this, &MainWindow::activatePopUpWidget);
-    connect(_dbc, &DataBaseController::transmitChangeToMainWindow,
+    connect(_databaseCreator, &DatabaseCreator::transmitChangeToMainWindow,
             this, &MainWindow::changeStackedWidgetIndex);
     connect(_unlockBaseWidget, &UnlockBaseWindow::transmitChangeToMainWindow,
             this, &MainWindow::changeStackedWidgetIndex);
@@ -69,7 +76,7 @@ void MainWindow::MWC_ConnectsOther()
             this, &MainWindow::receivePossibleFilePath);
     connect(_unlockBaseWidget, &UnlockBaseWindow::transmitDataBasePath,
             this, &MainWindow::receiveFilePath);
-    connect(_dbc, &DataBaseController::transmitFilePath,
+    connect(_databaseCreator, &DatabaseCreator::transmitFilePath,
             this, &MainWindow::receiveFilePath);
     connect(_addNewEntryWidget, &AddNewEntryWidget::transmitChangeToMainWindow,
             this, &MainWindow::changeStackedWidgetIndex);
@@ -175,7 +182,7 @@ void MainWindow::createBase()
 void MainWindow::showDatabasesGroups()
 {
     ui->groupListWidget->clear();
-    _dbc->showDatabasesGroups(ui->groupListWidget);
+    _databaseDisplay->showDatabasesGroups(ui->groupListWidget);
 }
 
 void MainWindow::adjustTableWidget()
@@ -217,7 +224,7 @@ void MainWindow::ifMainWindowActivated()
     if (ui->stackedWidget->currentIndex() == IndexMainWindow) {
         showDatabasesGroups();
         adjustTableWidget();
-        _dbc->showNotesByGroupName(ui->notesTableWidget, groupName);
+        _databaseDisplay->showNotesByGroupName(ui->notesTableWidget, groupName);
         _addNewEntryWidget->populateGroupComboBox();
         _editExistEntryWidget->populateGroupComboBox();
     }
@@ -228,7 +235,7 @@ void MainWindow::receiveFilePath(const QString &fp)
     filePath = fp;
     setDatabaseNameText();
     saveNewFilePath();
-    _dbc->setFilePath(fp);
+    DatabaseController::setFilePath(fp);
 }
 
 
@@ -328,6 +335,6 @@ void MainWindow::actionQuit()
 void MainWindow::on_groupListWidget_itemClicked(QListWidgetItem *item)
 {
     groupName = item->text();
-    _dbc->showNotesByGroupName(ui->notesTableWidget, groupName);
+    _databaseDisplay->showNotesByGroupName(ui->notesTableWidget, groupName);
 }
 

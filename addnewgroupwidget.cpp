@@ -1,8 +1,8 @@
 #include "addnewgroupwidget.h"
 #include "ui_addnewgroupwidget.h"
 
-AddNewGroupWidget::AddNewGroupWidget(DataBaseController *dbc, QWidget *parent)
-    : QDialog(parent), ui(new Ui::AddNewGroupWidget), dbc(dbc)
+AddNewGroupWidget::AddNewGroupWidget(DatabaseGroupsCreator *databaseGroupCreator, QWidget *parent)
+    : QDialog(parent), ui(new Ui::AddNewGroupWidget), databaseGroupCreator(databaseGroupCreator)
 {
     ui->setupUi(this);
 }
@@ -29,7 +29,7 @@ void AddNewGroupWidget::on_buttonBox_accepted()
         gd.otherNotes = "";
     }
 
-    dbc->createNewGroup(gd);
+    databaseGroupCreator->createNewGroup(gd);
     emit transmitChangeToMainWindow(IndexMainWindow);
     clearAll();
 

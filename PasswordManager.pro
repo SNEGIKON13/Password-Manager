@@ -12,7 +12,13 @@ SOURCES += \
     addnewentrywidget.cpp \
     addnewgroupwidget.cpp \
     createbasewidget.cpp \
-    databasecontroller.cpp \
+    dbmanagement/databasecontroller.cpp \
+    dbmanagement/databasecreator.cpp \
+    dbmanagement/databasedisplay.cpp \
+    dbmanagement/databasegroupscreator.cpp \
+    dbmanagement/databasegroupseditor.cpp \
+    dbmanagement/databasenotescreator.cpp \
+    dbmanagement/databasenoteseditor.cpp \
     editexistentrywidget.cpp \
     editexistgroupwidget.cpp \
     main.cpp \
@@ -28,7 +34,13 @@ HEADERS += \
     addnewentrywidget.h \
     addnewgroupwidget.h \
     createbasewidget.h \
-    databasecontroller.h \
+    dbmanagement/databasecontroller.h \
+    dbmanagement/databasecreator.h \
+    dbmanagement/databasedisplay.h \
+    dbmanagement/databasegroupscreator.h \
+    dbmanagement/databasegroupseditor.h \
+    dbmanagement/databasenotescreator.h \
+    dbmanagement/databasenoteseditor.h \
     editexistentrywidget.h \
     editexistgroupwidget.h \
     mainwindow.h \

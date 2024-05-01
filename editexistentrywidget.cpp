@@ -1,8 +1,8 @@
 #include "editexistentrywidget.h"
 #include "ui_editexistentrywidget.h"
 
-EditExistEntryWidget::EditExistEntryWidget(DataBaseController *dbc, QWidget *parent)
-    : QDialog(parent), ui(new Ui::EditExistEntryWidget), dbc(dbc)
+EditExistEntryWidget::EditExistEntryWidget(DatabaseNotesEditor *databaseNotesEditor, QWidget *parent)
+    : QDialog(parent), ui(new Ui::EditExistEntryWidget), databaseNotesEditor(databaseNotesEditor)
 {
     ui->setupUi(this);
 }
@@ -14,7 +14,7 @@ EditExistEntryWidget::~EditExistEntryWidget()
 
 void EditExistEntryWidget::toFillFields()
 {
-    dbc->selectNoteData(nd, noteName, groupName);
+    databaseNotesEditor->selectNoteData(nd, noteName, groupName);
     ui->noteName->setText(nd.noteName);
     ui->userName->setText(nd.userName);
     ui->url->setText(nd.url);
@@ -69,7 +69,7 @@ void EditExistEntryWidget::on_buttonBox_accepted()
         nd.otherNotes = "";
     }
 
-    dbc->updateNote(nd);
+    databaseNotesEditor->updateNote(nd);
     clearAllExceptId();
     emit transmitChangeToMainWindow(IndexMainWindow);
 }
@@ -100,7 +100,7 @@ void EditExistEntryWidget::setNoteName(const QString &noteName, const QString &g
 void EditExistEntryWidget::populateGroupComboBox()
 {
     ui->chooseGroup->clear();
-    QMap<int, QString> groupNames = dbc->getGroupNames();
+    QMap<int, QString> groupNames = databaseNotesEditor->getGroupNames();
     for (auto it = groupNames.begin(); it != groupNames.end(); ++it) {
         int groupId = it.key();
         QString groupName = it.value();

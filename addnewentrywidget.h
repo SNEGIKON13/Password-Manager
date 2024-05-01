@@ -7,7 +7,7 @@
 
 #include "EnumWidgets.h"
 #include "NodeData.h"
-#include "databasecontroller.h"
+#include "dbmanagement/databasenotescreator.h"
 
 namespace Ui {
 class AddNewEntryWidget;
@@ -18,7 +18,7 @@ class AddNewEntryWidget : public QDialog
     Q_OBJECT
 
 public:
-    AddNewEntryWidget(DataBaseController *dbc, QWidget *parent = nullptr);
+    AddNewEntryWidget(DatabaseNotesCreator *databaseNotesCreator, QWidget *parent = nullptr);
     ~AddNewEntryWidget();
 
 public slots:
@@ -42,7 +42,7 @@ private:
     QString url;
     QString passwordEntry;
     QString otherNotes;
-    DataBaseController *dbc;
+    DatabaseNotesCreator *databaseNotesCreator;
     NoteData nd;
 
 };

@@ -10,7 +10,7 @@
 #include <QStandardPaths>
 
 #include "EnumWidgets.h"
-#include "databasecontroller.h"
+#include "dbmanagement/databasecreator.h"
 
 namespace Ui {
 class CreateBaseWidget;
@@ -21,7 +21,7 @@ class CreateBaseWidget : public QDialog
     Q_OBJECT
 
 public:
-     CreateBaseWidget(DataBaseController* dbc, QWidget* parent = nullptr);
+     CreateBaseWidget(DatabaseCreator* databaseCreator, QWidget* parent = nullptr);
     ~CreateBaseWidget();
 
 private slots:
@@ -32,7 +32,7 @@ private slots:
 private:
     Ui::CreateBaseWidget *ui;
     QString baseName, basePassword, queryRequest;
-    DataBaseController *dbc;
+    DatabaseCreator *databaseCreator;
 
 };
 

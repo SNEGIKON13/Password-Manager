@@ -1,8 +1,8 @@
 #include "editexistgroupwidget.h"
 #include "ui_editexistgroupwidget.h"
 
-EditExistGroupWidget::EditExistGroupWidget(DataBaseController *dbc, QWidget *parent)
-    : QDialog(parent), ui(new Ui::EditExistGroupWidget), dbc(dbc)
+EditExistGroupWidget::EditExistGroupWidget(DatabaseGroupsEditor *databaseGroupEditor, QWidget *parent)
+    : QDialog(parent), ui(new Ui::EditExistGroupWidget), databaseGroupEditor(databaseGroupEditor)
 {
     ui->setupUi(this);
 }
@@ -14,7 +14,7 @@ EditExistGroupWidget::~EditExistGroupWidget()
 
 void EditExistGroupWidget::on_buttonBox_accepted()
 {
-    // dbc->selectNoteData(nd, 1);
+    // databaseGroupEditor->selectNoteData(nd, 1);
     // ui->groupName->setText(gd.groupName);
     // ui->otherNotesForGroup->setText(gd.otherNotes);
 }

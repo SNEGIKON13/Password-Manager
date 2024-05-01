@@ -4,7 +4,7 @@
 #include <QDialog>
 #include <QMessageBox>
 
-#include "databasecontroller.h"
+#include "dbmanagement/databasecontroller.h"
 #include "EnumWidgets.h"
 
 namespace Ui {

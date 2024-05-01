@@ -1,8 +1,8 @@
 #include "createbasewidget.h"
 #include "ui_createbasewidget.h"
 
-CreateBaseWidget::CreateBaseWidget(DataBaseController *dbc, QWidget* parent)
-    : QDialog(parent), ui(new Ui::CreateBaseWidget), dbc(dbc)
+CreateBaseWidget::CreateBaseWidget(DatabaseCreator *databaseCreator, QWidget* parent)
+    : QDialog(parent), ui(new Ui::CreateBaseWidget), databaseCreator(databaseCreator)
 {
     ui->setupUi(this);
 }
@@ -29,8 +29,8 @@ void CreateBaseWidget::on_buttonBox_accepted()
             QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) +
             QDir::separator() + baseName, "База данных (*.db)");
         if (!filePath.isEmpty()) {
-            dbc->setFilePath(filePath);
-            dbc->createDatabase();
+            databaseCreator->setFilePath(filePath);
+            databaseCreator->createDatabase();
         } else {
             QMessageBox::warning(this, "Ошибка", "Ошибка при cоздании базы данных");
         }

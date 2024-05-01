@@ -1,8 +1,8 @@
 #include "addnewentrywidget.h"
 #include "ui_addnewentrywidget.h"
 
-AddNewEntryWidget::AddNewEntryWidget(DataBaseController *dbc, QWidget *parent)
-    : QDialog(parent), ui(new Ui::AddNewEntryWidget), dbc(dbc)    
+AddNewEntryWidget::AddNewEntryWidget(DatabaseNotesCreator *databaseNotesCreator, QWidget *parent)
+    : QDialog(parent), ui(new Ui::AddNewEntryWidget), databaseNotesCreator(databaseNotesCreator)
 {
     ui->setupUi(this);
 }
@@ -60,7 +60,7 @@ void AddNewEntryWidget::on_buttonBox_accepted()
         return;
     }
 
-    dbc->createNewNote(nd);
+    databaseNotesCreator->createNewNote(nd);
 
     clearAll();
     emit transmitChangeToMainWindow(IndexMainWindow);
@@ -75,7 +75,7 @@ void AddNewEntryWidget::on_buttonBox_rejected()
 void AddNewEntryWidget::populateGroupComboBox()
 {
     ui->chooseGroup->clear();
-    QMap<int, QString> groupNames = dbc->getGroupNames();
+    QMap<int, QString> groupNames = databaseNotesCreator->getGroupNames();
     for (auto it = groupNames.begin(); it != groupNames.end(); ++it) {
         int groupId = it.key();
         QString groupName = it.value();
@@ -114,4 +114,3 @@ void AddNewEntryWidget::on_chooseGroup_currentIndexChanged(int index)
 {
     nd.group_id = index;
 }
-

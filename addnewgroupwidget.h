@@ -7,7 +7,7 @@
 
 #include "EnumWidgets.h"
 #include "GroupData.h"
-#include "databasecontroller.h"
+#include "dbmanagement/databasegroupscreator.h"
 
 namespace Ui {
 class AddNewGroupWidget;
@@ -18,7 +18,7 @@ class AddNewGroupWidget : public QDialog
     Q_OBJECT
 
 public:
-    explicit AddNewGroupWidget(DataBaseController *dbc, QWidget *parent = nullptr);
+    explicit AddNewGroupWidget(DatabaseGroupsCreator *databaseGroupCreator, QWidget *parent = nullptr);
     ~AddNewGroupWidget();
 
 signals:
@@ -31,7 +31,7 @@ private slots:
 
 private:
     Ui::AddNewGroupWidget *ui;
-    DataBaseController *dbc;
+    DatabaseGroupsCreator *databaseGroupCreator;
     GroupData gd;
 };
 

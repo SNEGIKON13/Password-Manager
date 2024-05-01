@@ -12,7 +12,16 @@
 #include "addnewgroupwidget.h"
 #include "editexistgroupwidget.h"
 #include "settingsmanager.h"
-#include "databasecontroller.h"
+
+#include "dbmanagement/databasecontroller.h"
+#include "dbmanagement/databasecreator.h"
+#include "dbmanagement/databasenotescreator.h"
+#include "dbmanagement/databasenoteseditor.h"
+#include "dbmanagement/databasegroupscreator.h"
+#include "dbmanagement/databasegroupseditor.h"
+#include "dbmanagement/databasedisplay.h"
+
+
 #include "EnumWidgets.h"
 
 QT_BEGIN_NAMESPACE
@@ -74,7 +83,14 @@ private:
     AddNewGroupWidget *_addNewGroupWidget;
     EditExistGroupWidget *_editExistGroupWidget;
 
-    DataBaseController *_dbc;
+    DatabaseController *_dbc;
+    DatabaseCreator *_databaseCreator;
+    DatabaseNotesCreator *_databaseNotesCreator;
+    DatabaseNotesEditor *_databaseNotesEditor;
+    DatabaseGroupsCreator *_databaseGroupsCreator;
+    DatabaseGroupsEditor *_databaseGroupsEditor;
+    DatabaseDisplay *_databaseDisplay;
+
     QString filePath, possibleFilePath;
     QStringList recentDatabases;
     QToolBar *_toolbar;

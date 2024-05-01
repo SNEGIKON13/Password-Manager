@@ -8,7 +8,7 @@
 
 #include "EnumWidgets.h"
 #include "NodeData.h"
-#include "databasecontroller.h"
+#include "dbmanagement/databasenoteseditor.h"
 
 namespace Ui {
 class EditExistEntryWidget;
@@ -19,7 +19,7 @@ class EditExistEntryWidget : public QDialog
     Q_OBJECT
 
 public:
-    explicit EditExistEntryWidget(DataBaseController *dbc, QWidget *parent = nullptr);
+    explicit EditExistEntryWidget(DatabaseNotesEditor *DatabaseNotesEditor, QWidget *parent = nullptr);
     ~EditExistEntryWidget();
     void setNoteName(const QString &noteName, const QString &groupName);
     void populateGroupComboBox();
@@ -41,7 +41,7 @@ private:
     QString url;
     QString passwordEntry;
     QString otherNotes;
-    DataBaseController *dbc;
+    DatabaseNotesEditor *databaseNotesEditor;
     NoteData nd;
     QTableWidgetItem *selectedNote;
 };

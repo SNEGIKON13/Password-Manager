@@ -17,30 +17,17 @@
 #include "NodeData.h"
 #include "GroupData.h"
 
-class DataBaseController : public QObject
+class DatabaseController : public QObject
 {
     Q_OBJECT
 public:
-    explicit DataBaseController(QObject *parent = nullptr);
-    void createDatabase();
+    explicit DatabaseController(QObject *parent = nullptr);
 
-    void createQueryNotesTable();
-    void createQueryGroupsTable();
-    void createNewNote(const NoteData &noteData);
-    void createNewGroup(const GroupData &groupData);
-
-    void showDatabasesGroups(QListWidget *list);
-    void showNotesByGroupName(QTableWidget *table, const QString &groupName);
-    void selectNoteData(NoteData &noteData, const QString &noteName, const QString &groupName);
-    void updateNote(NoteData &noteData);
-    void selectGroupData(GroupData &groupData);
-
-    void setFilePath(const QString &filePath);
-
+    QMap<int, QString> getGroupNames();
+    static void setFilePath(const QString &filePath);
     bool openDatabase();
     void closeDatabase();
     bool isEmptyFilePath();
-    QMap<int, QString> getGroupNames();
 
     // void sortGroup();
     // void sortNotes();
@@ -55,13 +42,10 @@ signals:
     void transmitFilePath(const QString &filePath);
     void transmitChangeToMainWindow(int index);
 
-private slots:
-    GroupData creatingStandartGroup();
-
-private:
-    QString filePath;
-    QSqlDatabase db;
+protected:
+    static QString filePath;
     QWidget *parentWidget;
+    QSqlDatabase db;
 
 };
 
