@@ -12,7 +12,7 @@ EditExistGroupWidget::~EditExistGroupWidget()
     delete ui;
 }
 
-void EditExistGroupWidget::setGroupName(const int groupId)
+void EditExistGroupWidget::setGroupId(const int groupId)
 {
     this->id = groupId;
 }

@@ -132,9 +132,7 @@ void MainWindow::MWC_CreationOfToolBar()
     _toolbar->addAction(ui->actionCreateDatabase);
     ui->actionCreateDatabase->setIcon(QIcon("://Images/CreateDatabase.png"));
     _toolbar->addAction(ui->actionChooseUnlockingBase);
-    ui->actionChooseUnlockingBase->setIcon(QIcon("://Images/UnlockDatabase.png"));
-    _toolbar->addAction(ui->actionLockDatabase_2);
-    ui->actionLockDatabase_2->setIcon(QIcon("://Images/LockDatabase.png"));
+    ui->actionChooseUnlockingBase->setIcon(QIcon("://Images/LockDatabase.png"));
 
     _toolbar->addWidget(spacer1);
     _toolbar->addWidget(separator1);
@@ -169,6 +167,18 @@ void MainWindow::MWC_CreationOfToolBar()
     ui->actionQuit->setIcon(QIcon("://Images/Quit.png"));
 }
 
+void MainWindow::MWC_Warnings()
+{
+    _deleteGroupWarning = new DeleteGroupWarning(this);
+    connect(_deleteGroupWarning, &DeleteGroupWarning::transmitDeletingConfirmation,
+            this, &MainWindow::mustDeleteGroup);
+}
+
+void MainWindow::mustDeleteGroup()
+{
+    _mustDeleteGroup = true;
+}
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -180,6 +190,7 @@ MainWindow::MainWindow(QWidget *parent)
     MWC_ConnectOfPushButtons();
     MWC_ConnectsOther();
     MWC_CreationOfToolBar();
+    MWC_Warnings();
 }
 
 MainWindow::~MainWindow()
@@ -221,18 +232,32 @@ void MainWindow::activatePopUpWidget(int index)
     }
 }
 
+void MainWindow::whichGroupToShow()
+{
+    if (counterOfNewGroupCreation != 0) {
+        setNewGroupItem();
+        counterOfNewGroupCreation--;
+    }
+    else {
+        _databaseDisplay->showNotesByGroupId(ui->notesTableWidget, groupId);
+    }
+}
+
+void MainWindow::toShowGroupOfNewNote()
+{
+    if (counterOfNewNoteCreation != 0) {
+        _databaseDisplay->showNotesByGroupId(ui->notesTableWidget, groupId);
+        counterOfNewNoteCreation--;
+    }
+}
+
 void MainWindow::ifMainWindowActivated()
 {
     if (ui->stackedWidget->currentIndex() == IndexMainWindow) {
         showDatabasesGroups();
         adjustTableWidget();
-        if (counterOfNewGroupCreation != 0) {
-            setNewGroupItem();
-            counterOfNewGroupCreation--;
-        }
-        else {
-            _databaseDisplay->showNotesByGroupId(ui->notesTableWidget, groupId);
-        }
+        whichGroupToShow();
+        toShowGroupOfNewNote();
         _addNewNoteWidget->populateGroupComboBox();
         _editExistNoteWidget->populateGroupComboBox();
     }
@@ -248,6 +273,22 @@ void MainWindow::firstStartOfMainWindow()
         _databaseDisplay->showNotesByGroupId(ui->notesTableWidget, groupId);
         _addNewNoteWidget->populateGroupComboBox();
         _editExistNoteWidget->populateGroupComboBox();
+    }
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    noteId = getIdOfSelectedNote();
+    groupId = getIdOfSelectedGroup();
+    if (event->key() == Qt::Key_Delete) {
+        if (noteId != 0) {
+            keyDeleteNote(noteId);
+        }
+        else if (groupId != 0) {
+            actionDeleteGroup();
+        }
+    } else {
+        QMainWindow::keyPressEvent(event);
     }
 }
 
@@ -353,6 +394,8 @@ void MainWindow::actionCreateNewNote()
         QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
     }
     else {
+        groupId = getIdOfSelectedGroup();
+        counterOfNewNoteCreation++;
         changeStackedWidgetIndex(IndexAddNewNoteWidget);
     }
 }
@@ -374,7 +417,7 @@ void MainWindow::actionChangeNote()
     if (_dbc->isEmptyFilePath()) {
         QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
     }
-    else if (noteId != -999) {
+    else if (noteId != -999  && noteId != 0) {
         _editExistNoteWidget->setNoteId(noteId);
         _editExistNoteWidget->toFillFields();
         changeStackedWidgetIndex(IndexEditExistNoteWidget);
@@ -386,17 +429,23 @@ void MainWindow::actionChangeNote()
 
 void MainWindow::actionDeleteNote()
 {
+    noteId = getIdOfSelectedNote();
     if (_dbc->isEmptyFilePath()) {
         QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
-        //TODO
     }
-    else {
-        noteId = getIdOfSelectedNote();
+    else if (noteId != -999 && noteId != 0) {
         _databaseNotesRemover->deleteNote(noteId);
         _databaseDisplay->showNotesByGroupId(ui->notesTableWidget, groupId);
     }
+    else {
+        QMessageBox::warning(this, "Ошибка", "Cначала выберите запись для удаления!");
+    }
 }
 
+void MainWindow::keyDeleteNote(const int noteId) {
+    _databaseNotesRemover->deleteNote(noteId);
+    _databaseDisplay->showNotesByGroupId(ui->notesTableWidget, groupId);
+}
 
 
 
@@ -432,35 +481,43 @@ int MainWindow::getIdOfSelectedGroup()
         row = ui->groupListWidget->row(selectedItem);
         return idItem = ui->groupListWidget->item(row)->data(Qt::UserRole).toInt();
     }
-    else {
-        QMessageBox::warning(this, "Ошибка", "Выберите группу для изменения!");
-    }
 }
 
 void MainWindow::actionChangeGroup()
 {
+    groupId = getIdOfSelectedGroup();
     if (_dbc->isEmptyFilePath()) {
         QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
     }
-    else {
-        groupId = getIdOfSelectedGroup();
-        _editExistGroupWidget->setGroupName(groupId);
+    else if (groupId != -999 && groupId != 0) {
+        _editExistGroupWidget->setGroupId(groupId);
         _editExistGroupWidget->toFillFields();
         changeStackedWidgetIndex(IndexEditExistGroupWidget);
+    } else {
+        QMessageBox::warning(this, "Ошибка", "Выберите группу для изменения!");
     }
 }
 
 void MainWindow::actionDeleteGroup()
 {
+    groupId = getIdOfSelectedGroup();
     if (_dbc->isEmptyFilePath()) {
         QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
     }
+    else if (groupId != -999 && groupId != 0) {
+        _deleteGroupWarning->exec();
+        if (_mustDeleteGroup) {
+            groupId = getIdOfSelectedGroup();
+            _databaseGroupsRemover->deleteGroup(groupId);
+            _databaseGroupsRemover->deleteNotesByGroupId(groupId);
+            setDefaultGroupIdOnStart();
+            _databaseDisplay->showDatabasesGroups(ui->groupListWidget);
+            _databaseDisplay->showNotesByGroupId(ui->notesTableWidget, groupId);
+            _mustDeleteGroup = false;
+        }
+    }
     else {
-        groupId = getIdOfSelectedGroup();
-        _databaseGroupsRemover->deleteGroup(groupId);
-        setDefaultGroupIdOnStart();
-        _databaseDisplay->showDatabasesGroups(ui->groupListWidget);
-        _databaseDisplay->showNotesByGroupId(ui->notesTableWidget, groupId);
+        QMessageBox::warning(this, "Ошибка", "Выберите группу для удаления!");
     }
 }
 

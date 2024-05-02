@@ -18,3 +18,21 @@ void DatabaseGroupsRemover::deleteGroup(const int groupId)
     }
     closeDatabase();
 }
+
+void DatabaseGroupsRemover::deleteNotesByGroupId(int groupId) {
+    if (openDatabase()) {
+        QSqlQuery query;
+        query.prepare("DELETE FROM notes WHERE group_id = :groupId");
+        query.bindValue(":groupId", groupId);
+        if (query.exec()) {
+            // Успешно удалено
+        } else {
+            closeDatabase();
+            throw std::runtime_error("Ошибка при удалении записей группы");
+        }
+        closeDatabase();
+    } else {
+        closeDatabase();
+        throw std::runtime_error("Ошибка при удалении записей группы");
+    }
+}

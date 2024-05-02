@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QKeyEvent>
+#include <QAbstractButton>
 #include <QToolBar>
 
 #include "database/welcomewidget.h"
@@ -22,6 +24,8 @@
 #include "dbmanagement/databasedisplay.h"
 #include "dbmanagement/databasenotesremover.h"
 #include "dbmanagement/databasegroupsremover.h"
+
+#include "deletegroupwarning.h"
 
 
 #include "structures/EnumWidgets.h"
@@ -75,6 +79,7 @@ private slots:
     void MWC_ConnectOfPushButtons();
     void MWC_ConnectsOther();
     void MWC_CreationOfToolBar();
+    void MWC_Warnings();
 
     void on_groupListWidget_itemClicked(QListWidgetItem *item);
     void setDefaultGroupIdOnStart();
@@ -83,8 +88,15 @@ private slots:
     int getIdOfSelectedGroup();
 
     void MWC_CreationOfDatabaseControllers();
+    void mustDeleteGroup();
 
 
+    void keyPressEvent(QKeyEvent *event);
+
+    void keyDeleteNote(const int noteId);
+    void whichGroupToShow();
+
+    void toShowGroupOfNewNote();
 
 private:
     Ui::MainWindow *ui;
@@ -106,6 +118,8 @@ private:
     DatabaseNotesRemover *_databaseNotesRemover;
     DatabaseGroupsRemover *_databaseGroupsRemover;
 
+    DeleteGroupWarning *_deleteGroupWarning;
+
     QString filePath, possibleFilePath;
     QStringList recentDatabases;
     QToolBar *_toolbar;
@@ -113,9 +127,11 @@ private:
         = {"Название записи", "Имя пользователя", "URL-адрес", "Заметки", "Время изменения"};
     QString groupName = "PasswordManager";
     int counterOfMWActivations = 0;
+    int counterOfNewNoteCreation = 0;
     int counterOfNewGroupCreation = 0;
     int noteId = -999;
     int groupId = -999;
+    bool _mustDeleteGroup = false;
 
 };
 #endif // MAINWINDOW_H

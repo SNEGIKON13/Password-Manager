@@ -119,7 +119,6 @@
     <addaction name="actionCreateDatabase"/>
     <addaction name="actionChooseUnlockingBase"/>
     <addaction name="separator"/>
-    <addaction name="actionLockDatabase_2"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -158,12 +157,12 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionCreateDatabase">
    <property name="text">
-    <string>Создать базу данных</string>
+    <string>Заблокировать эту базу данных и создать новую</string>
    </property>
   </action>
   <action name="actionChooseUnlockingBase">
    <property name="text">
-    <string>Открыть базу данных</string>
+    <string>Заблокировать базу данных и открыть другую</string>
    </property>
   </action>
   <action name="actionCreateNewNote">
@@ -185,10 +184,19 @@
    <property name="text">
     <string>Скопировать логин</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WindowShortcut</enum>
+   </property>
   </action>
   <action name="actionCopyPassword">
    <property name="text">
     <string>Скопировать пароль</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
    </property>
   </action>
   <action name="actionRecentBases">

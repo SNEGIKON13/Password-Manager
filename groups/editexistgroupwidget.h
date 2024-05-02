@@ -20,7 +20,7 @@ class EditExistGroupWidget : public QDialog
 public:
     explicit EditExistGroupWidget(DatabaseGroupsEditor *databaseGroupEditor, QWidget *parent = nullptr);
     ~EditExistGroupWidget();
-    void setGroupName(const int groupId);
+    void setGroupId(const int groupId);
     void toFillFields();
 
 signals:

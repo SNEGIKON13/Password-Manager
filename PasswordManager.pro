@@ -13,6 +13,7 @@ SOURCES += \
     database/createbasewidget.cpp \
     database/unlockbasewidget.cpp \
     database/settingsmanager.cpp \
+    deletegroupwarning.cpp \
     notes/addnewnotewidget.cpp \
     groups/addnewgroupwidget.cpp \
     groups/editexistgroupwidget.cpp \
@@ -31,6 +32,7 @@ SOURCES += \
 
 
 HEADERS += \
+    deletegroupwarning.h \
     notes/addnewnotewidget.h \
     notes/editexistnotewidget.h \
     structures/EnumWidgets.h \
@@ -57,6 +59,7 @@ FORMS += \
     addnewgroupwidget.ui \
     addnewnotewidget.ui \
     createbasewidget.ui \
+    deletegroupwarning.ui \
     editexistgroupwidget.ui \
     editexistnotewidget.ui \
     mainwindow.ui \
