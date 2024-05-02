@@ -1,25 +1,25 @@
-#ifndef ADDNEWENTRYWIDGET_H
-#define ADDNEWENTRYWIDGET_H
+#ifndef ADDNEWNOTEWIDGET_H
+#define ADDNEWNOTEWIDGET_H
 
 #include <QDialog>
 #include <QString>
 #include <QMessageBox>
 
-#include "EnumWidgets.h"
-#include "NodeData.h"
+#include "structures/EnumWidgets.h"
+#include "structures/NodeData.h"
 #include "dbmanagement/databasenotescreator.h"
 
 namespace Ui {
-class AddNewEntryWidget;
+class AddNewNoteWidget;
 }
 
-class AddNewEntryWidget : public QDialog
+class AddNewNoteWidget : public QDialog
 {
     Q_OBJECT
 
 public:
-    AddNewEntryWidget(DatabaseNotesCreator *databaseNotesCreator, QWidget *parent = nullptr);
-    ~AddNewEntryWidget();
+    AddNewNoteWidget(DatabaseNotesCreator *databaseNotesCreator, QWidget *parent = nullptr);
+    ~AddNewNoteWidget();
 
 public slots:
     void populateGroupComboBox();
@@ -36,7 +36,7 @@ private slots:
     void clearAll();
 
 private:
-    Ui::AddNewEntryWidget *ui;
+    Ui::AddNewNoteWidget *ui;
     QString noteName;
     QString userName;
     QString url;
@@ -47,4 +47,4 @@ private:
 
 };
 
-#endif // ADDNEWENTRYWIDGET_H
+#endif // ADDNEWNOTEWIDGET_H

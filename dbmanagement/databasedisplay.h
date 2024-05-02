@@ -8,7 +8,7 @@ class DatabaseDisplay : public DatabaseController
 public:
     explicit DatabaseDisplay(QObject *parent = nullptr);
     void showDatabasesGroups(QListWidget *list);
-    void showNotesByGroupName(QTableWidget *table, const QString &groupName);
+    void showNotesByGroupId(QTableWidget *table, const int groupId);
 };
 
 #endif // DATABASEDISPLAY_H

@@ -4,17 +4,16 @@ DatabaseNotesEditor::DatabaseNotesEditor(QObject *parent)
     : DatabaseController{parent}
 {}
 
-void DatabaseNotesEditor::selectNoteData(NoteData &noteData, const QString &noteName, const QString &groupName)
+void DatabaseNotesEditor::selectNoteData(NoteData &noteData, const int id)
 {
     openDatabase();
 
     QSqlQuery query;
-    QString queryRequest = "SELECT id, note_name, login, url, password, other_notes,"
-                           " group_id FROM notes WHERE note_name = :noteName AND group_id ="
-                           " (SELECT id FROM groups WHERE group_name = :groupName)";
+    QString queryRequest = "SELECT id, note_name, login, url, password, other_notes, group_id "
+                           "FROM notes "
+                           "WHERE id = :id";
     query.prepare(queryRequest);
-    query.bindValue(":noteName", noteName);
-    query.bindValue(":groupName", groupName);
+    query.bindValue(":id", id);
 
     if (query.exec())
     {

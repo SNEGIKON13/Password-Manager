@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>AddNewEntryWidget</class>
- <widget class="QDialog" name="AddNewEntryWidget">
+ <class>EditExistNoteWidget</class>
+ <widget class="QDialog" name="EditExistNoteWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,15 +11,15 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Создать новую запись</string>
+   <string>Изменить запись</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="label_6">
          <property name="maximumSize">
           <size>
            <width>16777215</width>
@@ -35,7 +35,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="label_7">
          <property name="maximumSize">
           <size>
            <width>16777215</width>
@@ -51,7 +51,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_3">
+        <widget class="QLabel" name="label_8">
          <property name="maximumSize">
           <size>
            <width>16777215</width>
@@ -67,7 +67,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_4">
+        <widget class="QLabel" name="label_9">
          <property name="maximumSize">
           <size>
            <width>16777215</width>
@@ -83,7 +83,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_5">
+        <widget class="QLabel" name="label_10">
          <property name="text">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Заметки:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
@@ -93,7 +93,7 @@
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer_2">
+        <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -108,18 +108,23 @@
        <item>
         <widget class="QComboBox" name="chooseGroup">
          <property name="currentText">
-          <string/>
+          <string>Стандартная группа</string>
          </property>
          <property name="currentIndex">
-          <number>-1</number>
+          <number>0</number>
          </property>
          <property name="placeholderText">
           <string>Выберите группу</string>
          </property>
+         <item>
+          <property name="text">
+           <string>Стандартная группа</string>
+          </property>
+         </item>
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer">
+        <spacer name="verticalSpacer_4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -134,7 +139,7 @@
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
         <widget class="QLineEdit" name="noteName">
          <property name="maximumSize">
@@ -195,22 +200,5 @@
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>AddNewEntryWidget</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

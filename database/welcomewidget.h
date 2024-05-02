@@ -7,8 +7,8 @@
 #include <QMessageBox>
 #include <QStandardPaths>
 
-#include "settingsmanager.h"
-#include "EnumWidgets.h"
+#include "database/settingsmanager.h"
+#include "structures/EnumWidgets.h"
 
 namespace Ui {
 class WelcomeWidget;

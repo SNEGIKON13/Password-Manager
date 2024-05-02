@@ -4,14 +4,14 @@
 #include <QMainWindow>
 #include <QToolBar>
 
-#include "welcomewidget.h"
-#include "unlockbasewidget.h"
-#include "createbasewidget.h"
-#include "addnewentrywidget.h"
-#include "editexistentrywidget.h"
-#include "addnewgroupwidget.h"
-#include "editexistgroupwidget.h"
-#include "settingsmanager.h"
+#include "database/welcomewidget.h"
+#include "database/unlockbasewidget.h"
+#include "database/createbasewidget.h"
+#include "database/settingsmanager.h"
+#include "notes/addnewnotewidget.h"
+#include "notes/editexistnotewidget.h"
+#include "groups/addnewgroupwidget.h"
+#include "groups/editexistgroupwidget.h"
 
 #include "dbmanagement/databasecontroller.h"
 #include "dbmanagement/databasecreator.h"
@@ -24,7 +24,7 @@
 #include "dbmanagement/databasegroupsremover.h"
 
 
-#include "EnumWidgets.h"
+#include "structures/EnumWidgets.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -54,10 +54,11 @@ public slots:
     void actionDeleteGroup();
     void actionSort();
     void actionQuit();
-    void receiveNewNameOfGroup(const QString &gn);
     void receiveFilePath(const QString &fp);
     void receivePossibleFilePath(const QString &fp);
     void unlockBase();
+
+    void setNewGroupItem();
 
 private slots:
     void createBase();
@@ -66,6 +67,7 @@ private slots:
     void adjustTableWidget();
     void setDatabaseNameText();
     void ifMainWindowActivated();
+    void firstStartOfMainWindow();
 
     void MWC_ConnectOfQActions();
     void MWC_InsertStackedWidgets();
@@ -75,22 +77,22 @@ private slots:
     void MWC_CreationOfToolBar();
 
     void on_groupListWidget_itemClicked(QListWidgetItem *item);
-    void setIndexOfNewNameGroup();
-    void setDefaultGroupNameOnStart();
-    void firstStartOfMainWindow();
+    void setDefaultGroupIdOnStart();
 
-    QString selectedTableItem();
-    QString selectedListItem();
+    int getIdOfSelectedNote();
+    int getIdOfSelectedGroup();
 
     void MWC_CreationOfDatabaseControllers();
+
+
 
 private:
     Ui::MainWindow *ui;
     WelcomeWidget *_welcomeWidget;
     UnlockBaseWindow *_unlockBaseWidget;
     CreateBaseWidget *_createBaseWidget;
-    AddNewEntryWidget *_addNewEntryWidget;
-    EditExistEntryWidget *_editExistEntryWidget;
+    AddNewNoteWidget *_addNewNoteWidget;
+    EditExistNoteWidget *_editExistNoteWidget;
     AddNewGroupWidget *_addNewGroupWidget;
     EditExistGroupWidget *_editExistGroupWidget;
 
@@ -111,6 +113,9 @@ private:
         = {"Название записи", "Имя пользователя", "URL-адрес", "Заметки", "Время изменения"};
     QString groupName = "PasswordManager";
     int counterOfMWActivations = 0;
+    int counterOfNewGroupCreation = 0;
+    int noteId = -999;
+    int groupId = -999;
 
 };
 #endif // MAINWINDOW_H

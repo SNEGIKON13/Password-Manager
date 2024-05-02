@@ -1,27 +1,27 @@
-#ifndef EDITEXISTENTRYWIDGET_H
-#define EDITEXISTENTRYWIDGET_H
+#ifndef EDITEXISTNOTEWIDGET_H
+#define EDITEXISTNOTEWIDGET_H
 
 #include <QDialog>
 #include <QString>
 #include <QMessageBox>
 #include <QTableWidgetItem>
 
-#include "EnumWidgets.h"
-#include "NodeData.h"
+#include "structures/EnumWidgets.h"
+#include "structures/NodeData.h"
 #include "dbmanagement/databasenoteseditor.h"
 
 namespace Ui {
-class EditExistEntryWidget;
+class EditExistNoteWidget;
 }
 
-class EditExistEntryWidget : public QDialog
+class EditExistNoteWidget : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit EditExistEntryWidget(DatabaseNotesEditor *DatabaseNotesEditor, QWidget *parent = nullptr);
-    ~EditExistEntryWidget();
-    void setNoteName(const QString &noteName, const QString &groupName);
+    explicit EditExistNoteWidget(DatabaseNotesEditor *DatabaseNotesEditor, QWidget *parent = nullptr);
+    ~EditExistNoteWidget();
+    void setNoteId(const int noteId);
     void populateGroupComboBox();
     void toFillFields();
 
@@ -34,7 +34,7 @@ private slots:
     void clearAllExceptId();
 
 private:
-    Ui::EditExistEntryWidget *ui;
+    Ui::EditExistNoteWidget *ui;
     QString noteName;
     QString groupName;
     QString userName;
@@ -44,6 +44,7 @@ private:
     DatabaseNotesEditor *databaseNotesEditor;
     NoteData nd;
     QTableWidgetItem *selectedNote;
+    int id;
 };
 
-#endif // EDITEXISTENTRYWIDGET_H
+#endif // EDITEXISTNOTEWIDGET_H

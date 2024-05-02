@@ -9,9 +9,13 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    addnewentrywidget.cpp \
-    addnewgroupwidget.cpp \
-    createbasewidget.cpp \
+    database/welcomewidget.cpp \
+    database/createbasewidget.cpp \
+    database/unlockbasewidget.cpp \
+    database/settingsmanager.cpp \
+    notes/addnewnotewidget.cpp \
+    groups/addnewgroupwidget.cpp \
+    groups/editexistgroupwidget.cpp \
     dbmanagement/databasecontroller.cpp \
     dbmanagement/databasecreator.cpp \
     dbmanagement/databasedisplay.cpp \
@@ -21,21 +25,23 @@ SOURCES += \
     dbmanagement/databasenotescreator.cpp \
     dbmanagement/databasenoteseditor.cpp \
     dbmanagement/databasenotesremover.cpp \
-    editexistentrywidget.cpp \
-    editexistgroupwidget.cpp \
     main.cpp \
     mainwindow.cpp \
-    settingsmanager.cpp \
-    unlockbasewidget.cpp \
-    welcomewidget.cpp    
+    notes/editexistnotewidget.cpp
+
 
 HEADERS += \
-    EnumWidgets.h \
-    GroupData.h \
-    NodeData.h \
-    addnewentrywidget.h \
-    addnewgroupwidget.h \
-    createbasewidget.h \
+    notes/addnewnotewidget.h \
+    notes/editexistnotewidget.h \
+    structures/EnumWidgets.h \
+    structures/GroupData.h \
+    structures/NodeData.h \
+    database/welcomewidget.h \
+    database/createbasewidget.h \
+    database/unlockbasewidget.h \
+    database/settingsmanager.h \
+    groups/addnewgroupwidget.h \
+    groups/editexistgroupwidget.h \
     dbmanagement/databasecontroller.h \
     dbmanagement/databasecreator.h \
     dbmanagement/databasedisplay.h \
@@ -45,19 +51,14 @@ HEADERS += \
     dbmanagement/databasenotescreator.h \
     dbmanagement/databasenoteseditor.h \
     dbmanagement/databasenotesremover.h \
-    editexistentrywidget.h \
-    editexistgroupwidget.h \
-    mainwindow.h \
-    settingsmanager.h \
-    unlockbasewidget.h \
-    welcomewidget.h
+    mainwindow.h
 
 FORMS += \
-    addnewentrywidget.ui \
     addnewgroupwidget.ui \
+    addnewnotewidget.ui \
     createbasewidget.ui \
-    editexistentrywidget.ui \
     editexistgroupwidget.ui \
+    editexistnotewidget.ui \
     mainwindow.ui \
     unlockbasewidget.ui \
     welcomewidget.ui

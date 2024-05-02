@@ -12,9 +12,9 @@ EditExistGroupWidget::~EditExistGroupWidget()
     delete ui;
 }
 
-void EditExistGroupWidget::setGroupName(const QString &groupName)
+void EditExistGroupWidget::setGroupName(const int groupId)
 {
-    this->groupName = groupName;
+    this->id = groupId;
 }
 
 void EditExistGroupWidget::on_buttonBox_accepted()
@@ -35,7 +35,6 @@ void EditExistGroupWidget::on_buttonBox_accepted()
     }
 
     databaseGroupEditor->updateGroup(gd);
-    emit transmitChangedGroupName(gd.groupName);
     emit transmitChangeToMainWindow(IndexMainWindow);
     clearAllExceptId();
 
@@ -56,7 +55,7 @@ void EditExistGroupWidget::clearAllExceptId()
 
 void EditExistGroupWidget::toFillFields()
 {
-    databaseGroupEditor->selectGroupData(gd, groupName);
+    databaseGroupEditor->selectGroupData(gd, id);
     ui->groupName->setText(gd.groupName);
     ui->otherNotesForGroup->setText(gd.otherNotes);
 }

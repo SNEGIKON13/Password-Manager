@@ -4,13 +4,13 @@ DatabaseGroupsEditor::DatabaseGroupsEditor(QObject *parent)
     : DatabaseController{parent}
 {}
 
-void DatabaseGroupsEditor::selectGroupData(GroupData &groupData, QString groupName)
+void DatabaseGroupsEditor::selectGroupData(GroupData &groupData, const int id)
 {
     openDatabase();
     QSqlQuery query;
-    QString selectQuery = "SELECT * FROM groups WHERE group_name = :groupName";
+    QString selectQuery = "SELECT * FROM groups WHERE id = :id";
     query.prepare(selectQuery);
-    query.bindValue(":groupName", groupName);
+    query.bindValue(":id", id);
     query.exec();
 
     while (query.next()) {
@@ -31,5 +31,5 @@ void DatabaseGroupsEditor::updateGroup(GroupData &groupData)
     query.bindValue(":otherNotes", groupData.otherNotes);
     query.bindValue(":groupId", groupData.id);
     query.exec();
-        closeDatabase();
+    closeDatabase();
 }

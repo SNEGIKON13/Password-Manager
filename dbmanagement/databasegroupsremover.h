@@ -7,7 +7,7 @@ class DatabaseGroupsRemover : public DatabaseController
 {
 public:
     explicit DatabaseGroupsRemover(QObject *parent = nullptr);
-    void deleteGroup();
+    void deleteGroup(const int groupId);
 };
 
 #endif // DATABASEGROUPSREMOVER_H

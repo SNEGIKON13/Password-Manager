@@ -1,18 +1,18 @@
-#include "addnewentrywidget.h"
-#include "ui_addnewentrywidget.h"
+#include "notes/addnewnotewidget.h"
+#include "ui_addnewnotewidget.h"
 
-AddNewEntryWidget::AddNewEntryWidget(DatabaseNotesCreator *databaseNotesCreator, QWidget *parent)
-    : QDialog(parent), ui(new Ui::AddNewEntryWidget), databaseNotesCreator(databaseNotesCreator)
+AddNewNoteWidget::AddNewNoteWidget(DatabaseNotesCreator *databaseNotesCreator, QWidget *parent)
+    : QDialog(parent), ui(new Ui::AddNewNoteWidget), databaseNotesCreator(databaseNotesCreator)
 {
     ui->setupUi(this);
 }
 
-AddNewEntryWidget::~AddNewEntryWidget()
+AddNewNoteWidget::~AddNewNoteWidget()
 {
     delete ui;
 }
 
-void AddNewEntryWidget::on_buttonBox_accepted()
+void AddNewNoteWidget::on_buttonBox_accepted()
 {
     clearStruct();
 
@@ -25,14 +25,14 @@ void AddNewEntryWidget::on_buttonBox_accepted()
         nd.noteName = ui->noteName->text();
     }
     else {
-        QMessageBox::warning(this, "Ошибка", "Ввод пароля обязателен!");
+        QMessageBox::warning(this, "Ошибка", "Ввод названия записи обязателен!");
         return;
     }
     if (!ui->passwordEntry->text().isEmpty()) {
         nd.passwordEntry = ui->passwordEntry->text();
     }
     else {
-        QMessageBox::warning(this, "Ошибка", "Ввод названия записи обязателен!");
+        QMessageBox::warning(this, "Ошибка", "Ввод пароля обязателен!");
         return;
     }
     if (!ui->userName->text().isEmpty()) {
@@ -66,13 +66,13 @@ void AddNewEntryWidget::on_buttonBox_accepted()
     emit transmitChangeToMainWindow(IndexMainWindow);
 }
 
-void AddNewEntryWidget::on_buttonBox_rejected()
+void AddNewNoteWidget::on_buttonBox_rejected()
 {
     clearAll();
     emit transmitChangeToMainWindow(IndexMainWindow);
 }
 
-void AddNewEntryWidget::populateGroupComboBox()
+void AddNewNoteWidget::populateGroupComboBox()
 {
     ui->chooseGroup->clear();
     QMap<int, QString> groupNames = databaseNotesCreator->getGroupNames();
@@ -84,7 +84,7 @@ void AddNewEntryWidget::populateGroupComboBox()
     ui->chooseGroup->setCurrentIndex(0);
 }
 
-void AddNewEntryWidget::clearUiText()
+void AddNewNoteWidget::clearUiText()
 {
     ui->noteName->clear();
     ui->passwordEntry->clear();
@@ -93,7 +93,7 @@ void AddNewEntryWidget::clearUiText()
     ui->otherNotes->clear();
 }
 
-void AddNewEntryWidget::clearStruct()
+void AddNewNoteWidget::clearStruct()
 {
     nd.noteName.clear();
     nd.userName.clear();
@@ -103,14 +103,14 @@ void AddNewEntryWidget::clearStruct()
     nd.group_id = 1;
 }
 
-void AddNewEntryWidget::clearAll()
+void AddNewNoteWidget::clearAll()
 {
     clearStruct();
     clearUiText();
 }
 
 
-void AddNewEntryWidget::on_chooseGroup_currentIndexChanged(int index)
+void AddNewNoteWidget::on_chooseGroup_currentIndexChanged(int index)
 {
     nd.group_id = index;
 }

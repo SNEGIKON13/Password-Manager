@@ -7,7 +7,7 @@ class DatabaseNotesRemover : public DatabaseController
 {
 public:
     explicit DatabaseNotesRemover(QObject *parent = nullptr);
-    void deleteNote();
+    void deleteNote(const int noteId);
 };
 
 #endif // DATABASENOTESREMOVER_H

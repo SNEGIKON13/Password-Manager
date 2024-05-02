@@ -7,7 +7,7 @@ class DatabaseNotesEditor : public DatabaseController
 {
 public:
     explicit DatabaseNotesEditor(QObject *parent = nullptr);
-    void selectNoteData(NoteData &noteData, const QString &noteName, const QString &groupName);
+    void selectNoteData(NoteData &noteData, const int id);
     void updateNote(NoteData &noteData);
 };
 

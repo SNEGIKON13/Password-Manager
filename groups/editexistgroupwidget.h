@@ -5,8 +5,8 @@
 #include <QString>
 #include <QMessageBox>
 
-#include "EnumWidgets.h"
-#include "GroupData.h"
+#include "structures/EnumWidgets.h"
+#include "structures/GroupData.h"
 #include "dbmanagement/databasegroupseditor.h"
 
 namespace Ui {
@@ -20,12 +20,11 @@ class EditExistGroupWidget : public QDialog
 public:
     explicit EditExistGroupWidget(DatabaseGroupsEditor *databaseGroupEditor, QWidget *parent = nullptr);
     ~EditExistGroupWidget();
-    void setGroupName(const QString &groupName);
+    void setGroupName(const int groupId);
     void toFillFields();
 
 signals:
     void transmitChangeToMainWindow(int index);
-    void transmitChangedGroupName(QString newName);
 
 private slots:
     void clearAllExceptId();
@@ -36,7 +35,7 @@ private:
     Ui::EditExistGroupWidget *ui;
     DatabaseGroupsEditor *databaseGroupEditor;
     GroupData gd;
-    QString groupName;
+    int id;
 
 };
 

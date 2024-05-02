@@ -41,7 +41,6 @@ void AddNewGroupWidget::clearAll()
     gd.otherNotes.clear();
 }
 
-
 void AddNewGroupWidget::on_buttonBox_rejected()
 {
     clearAll();

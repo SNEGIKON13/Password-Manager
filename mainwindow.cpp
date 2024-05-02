@@ -29,8 +29,8 @@ void MainWindow::MWC_InsertStackedWidgets()
 {
     ui->setupUi(this);
     ui->stackedWidget->insertWidget(1, _welcomeWidget);
-    ui->stackedWidget->insertWidget(2, _addNewEntryWidget);
-    ui->stackedWidget->insertWidget(3, _editExistEntryWidget);
+    ui->stackedWidget->insertWidget(2, _addNewNoteWidget);
+    ui->stackedWidget->insertWidget(3, _editExistNoteWidget);
     ui->stackedWidget->insertWidget(4, _addNewGroupWidget);
     ui->stackedWidget->insertWidget(5, _editExistGroupWidget);
     ui->stackedWidget->setCurrentIndex(IndexWelcomeWidget);
@@ -55,8 +55,8 @@ void MainWindow::MWC_CreationOfUiForms()
     _welcomeWidget->showRecentDatabases();
     _unlockBaseWidget = new UnlockBaseWindow(this);
     _createBaseWidget = new CreateBaseWidget(_databaseCreator, this);
-    _addNewEntryWidget = new AddNewEntryWidget(_databaseNotesCreator, this);
-    _editExistEntryWidget = new EditExistEntryWidget(_databaseNotesEditor, this);
+    _addNewNoteWidget = new AddNewNoteWidget(_databaseNotesCreator, this);
+    _editExistNoteWidget = new EditExistNoteWidget(_databaseNotesEditor, this);
     _addNewGroupWidget = new AddNewGroupWidget(_databaseGroupsCreator, this);
     _editExistGroupWidget = new EditExistGroupWidget(_databaseGroupsEditor, this);
 }
@@ -83,16 +83,14 @@ void MainWindow::MWC_ConnectsOther()
             this, &MainWindow::receiveFilePath);
     connect(_databaseCreator, &DatabaseCreator::transmitFilePath,
             this, &MainWindow::receiveFilePath);
-    connect(_addNewEntryWidget, &AddNewEntryWidget::transmitChangeToMainWindow,
+    connect(_addNewNoteWidget, &AddNewNoteWidget::transmitChangeToMainWindow,
             this, &MainWindow::changeStackedWidgetIndex);
-    connect(_editExistEntryWidget, &EditExistEntryWidget::transmitChangeToMainWindow,
+    connect(_editExistNoteWidget, &EditExistNoteWidget::transmitChangeToMainWindow,
             this, &MainWindow::changeStackedWidgetIndex);
     connect(_addNewGroupWidget, &AddNewGroupWidget::transmitChangeToMainWindow,
             this, &MainWindow::changeStackedWidgetIndex);
     connect(_editExistGroupWidget, &EditExistGroupWidget::transmitChangeToMainWindow,
             this, &MainWindow::changeStackedWidgetIndex);
-    connect(_editExistGroupWidget, &EditExistGroupWidget::transmitChangedGroupName,
-            this, &MainWindow::receiveNewNameOfGroup);
 }
 
 void MainWindow::MWC_CreationOfToolBar()
@@ -189,6 +187,14 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
+
+
+//НЕ КОНСТРУКТОР
+
+
+
+
 void MainWindow::changeStackedWidgetIndex(int index)
 {
     ui->stackedWidget->setCurrentIndex(index);
@@ -215,10 +221,35 @@ void MainWindow::activatePopUpWidget(int index)
     }
 }
 
+void MainWindow::ifMainWindowActivated()
+{
+    if (ui->stackedWidget->currentIndex() == IndexMainWindow) {
+        showDatabasesGroups();
+        adjustTableWidget();
+        if (counterOfNewGroupCreation != 0) {
+            setNewGroupItem();
+            counterOfNewGroupCreation--;
+        }
+        else {
+            _databaseDisplay->showNotesByGroupId(ui->notesTableWidget, groupId);
+        }
+        _addNewNoteWidget->populateGroupComboBox();
+        _editExistNoteWidget->populateGroupComboBox();
+    }
+}
 
-
-
-
+void MainWindow::firstStartOfMainWindow()
+{
+    if (ui->stackedWidget->currentIndex() == IndexMainWindow) {
+        showDatabasesGroups();
+        adjustTableWidget();
+        setDefaultGroupIdOnStart();
+        ui->groupListWidget->setCurrentRow(groupId - 1);
+        _databaseDisplay->showNotesByGroupId(ui->notesTableWidget, groupId);
+        _addNewNoteWidget->populateGroupComboBox();
+        _editExistNoteWidget->populateGroupComboBox();
+    }
+}
 
 void MainWindow::unlockBase()
 {
@@ -271,55 +302,15 @@ void MainWindow::setDatabaseNameText()
     ui->baseName->setFont(font);
 }
 
-void MainWindow::setIndexOfNewNameGroup()
-{
-    QListWidgetItem* targetItem = nullptr;
-    for (int row = 0; row < ui->groupListWidget->count(); ++row) {
-        QListWidgetItem* item = ui->groupListWidget->item(row);
-        if (item->text() == groupName) {
-            targetItem = item;
-            break;
-        }
-    }
-
-    if (targetItem != nullptr) {
-        ui->groupListWidget->setCurrentItem(targetItem);
-    }
-}
-
-void MainWindow::setDefaultGroupNameOnStart()
+void MainWindow::setDefaultGroupIdOnStart()
 {
     QMap<int, QString> groupNames = _dbc->getGroupNames();
     if (!groupNames.isEmpty()) {
-        int firstGroupId = groupNames.firstKey();
-        groupName = groupNames.value(firstGroupId);
+        groupId = groupNames.firstKey();
     }
 }
 
-void MainWindow::ifMainWindowActivated()
-{
-    if (ui->stackedWidget->currentIndex() == IndexMainWindow) {
-        showDatabasesGroups();
-        adjustTableWidget();
-        setIndexOfNewNameGroup();
-        _databaseDisplay->showNotesByGroupName(ui->notesTableWidget, groupName);
-        _addNewEntryWidget->populateGroupComboBox();
-        _editExistEntryWidget->populateGroupComboBox();
-    }
-}
 
-void MainWindow::firstStartOfMainWindow()
-{
-    if (ui->stackedWidget->currentIndex() == IndexMainWindow) {
-        showDatabasesGroups();
-        adjustTableWidget();
-        setDefaultGroupNameOnStart();
-        setIndexOfNewNameGroup();
-        _databaseDisplay->showNotesByGroupName(ui->notesTableWidget, groupName);
-        _addNewEntryWidget->populateGroupComboBox();
-        _editExistEntryWidget->populateGroupComboBox();
-    }
-}
 
 void MainWindow::receiveFilePath(const QString &fp)
 {
@@ -329,114 +320,13 @@ void MainWindow::receiveFilePath(const QString &fp)
     DatabaseController::setFilePath(fp);
 }
 
-void MainWindow::receiveNewNameOfGroup(const QString &gn)
-{
-    groupName = gn;
-}
 
 
 
+//НАСТРОЙКИ БАЗЫ ДАННЫХ
 
-void MainWindow::actionCreateNewNote()
-{
-    if (_dbc->isEmptyFilePath()) {
-        QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
-    }
-    else {
-        changeStackedWidgetIndex(IndexAddNewEntryWidget);
-    }
-}
 
-QString MainWindow::selectedTableItem()
-{
-    QList<QTableWidgetItem*> selectedItems = ui->notesTableWidget->selectedItems();
-    if (!selectedItems.isEmpty()) {
-        QTableWidgetItem* selectedItem = selectedItems.first();
-        return selectedItem->text();;
-    } else {
-        QMessageBox::warning(this, "Ошибка", "Выберите запись для изменения!");
-    }
 
-}
-
-void MainWindow::actionChangeNote()
-{
-    if (_dbc->isEmptyFilePath()) {
-        QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
-    }
-    else {
-        QString itemName = selectedTableItem();
-        _editExistEntryWidget->setNoteName(itemName, groupName);
-        _editExistEntryWidget->toFillFields();
-        changeStackedWidgetIndex(IndexEditExistEntryWidget);
-    }
-}
-
-void MainWindow::actionDeleteNote()
-{
-    if (_dbc->isEmptyFilePath()) {
-        QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
-        //TODO
-    }
-    else {
-        QString itemName = selectedTableItem();
-        _databaseNotesRemover->deleteNote();
-    }
-}
-
-void MainWindow::actionCreateGroup()
-{
-    if (_dbc->isEmptyFilePath()) {
-        QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
-    }
-    else {
-        changeStackedWidgetIndex(IndexAddNewGroupWidget);
-    }
-}
-
-QString MainWindow::selectedListItem()
-{
-    QList<QListWidgetItem*> selectedItems = ui->groupListWidget->selectedItems();
-    if (!selectedItems.isEmpty()) {
-        QListWidgetItem* selectedItem = selectedItems.first();
-        return selectedItem->text();
-    }
-    else {
-        QMessageBox::warning(this, "Ошибка", "Выберите группу для изменения!");
-    }
-}
-
-void MainWindow::actionChangeGroup()
-{
-    if (_dbc->isEmptyFilePath()) {
-        QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
-    }
-    else {
-        QString itemName = selectedListItem();
-        _editExistGroupWidget->setGroupName(itemName);
-        _editExistGroupWidget->toFillFields();
-        changeStackedWidgetIndex(IndexEditExistGroupWidget);
-    }
-}
-
-void MainWindow::actionDeleteGroup()
-{
-    if (_dbc->isEmptyFilePath()) {
-        QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
-        //TODO
-    }
-    else {
-        _databaseGroupsRemover->deleteGroup();
-    }
-}
-
-void MainWindow::actionSort()
-{
-    if (_dbc->isEmptyFilePath()) {
-        QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
-        //TODO
-    }
-}
 
 void MainWindow::actionCreateDatabase()
 {
@@ -449,14 +339,155 @@ void MainWindow::actionChooseUnlockingBase()
     _welcomeWidget->showRecentDatabases();
 }
 
-void MainWindow::actionQuit()
+
+
+
+//НАСТРОЙКИ ЗАПИСЕЙ
+
+
+
+
+void MainWindow::actionCreateNewNote()
 {
-    close();
+    if (_dbc->isEmptyFilePath()) {
+        QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
+    }
+    else {
+        changeStackedWidgetIndex(IndexAddNewNoteWidget);
+    }
+}
+
+int MainWindow::getIdOfSelectedNote()
+{
+    QList<QTableWidgetItem*> selectedItems = ui->notesTableWidget->selectedItems();
+    int idItem, row;
+    if (!selectedItems.isEmpty()) {
+        QTableWidgetItem* selectedItem = selectedItems.first();
+        row = selectedItem->row();
+        return idItem = ui->notesTableWidget->item(row, 0)->data(Qt::UserRole).toInt();
+    }
+}
+
+void MainWindow::actionChangeNote()
+{
+    noteId = getIdOfSelectedNote();
+    if (_dbc->isEmptyFilePath()) {
+        QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
+    }
+    else if (noteId != -999) {
+        _editExistNoteWidget->setNoteId(noteId);
+        _editExistNoteWidget->toFillFields();
+        changeStackedWidgetIndex(IndexEditExistNoteWidget);
+    }
+    else {
+        QMessageBox::warning(this, "Ошибка", "Выберите запись для изменения!");
+    }
+}
+
+void MainWindow::actionDeleteNote()
+{
+    if (_dbc->isEmptyFilePath()) {
+        QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
+        //TODO
+    }
+    else {
+        noteId = getIdOfSelectedNote();
+        _databaseNotesRemover->deleteNote(noteId);
+        _databaseDisplay->showNotesByGroupId(ui->notesTableWidget, groupId);
+    }
+}
+
+
+
+
+//НАСТРОЙКИ ГРУППЫ
+
+
+
+
+void MainWindow::setNewGroupItem()
+{
+    int indexOfLastElement = ui->groupListWidget->count() - 1;
+    QListWidgetItem* newGroupItem = ui->groupListWidget->item(indexOfLastElement);
+    on_groupListWidget_itemClicked(newGroupItem);
+}
+
+void MainWindow::actionCreateGroup()
+{
+    if (_dbc->isEmptyFilePath()) {
+        QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
+    }
+    else {
+        counterOfNewGroupCreation++;
+        changeStackedWidgetIndex(IndexAddNewGroupWidget);
+    }
+}
+
+int MainWindow::getIdOfSelectedGroup()
+{
+    QList<QListWidgetItem*> selectedItems = ui->groupListWidget->selectedItems();
+    int idItem, row;
+    if (!selectedItems.isEmpty()) {
+        QListWidgetItem* selectedItem = selectedItems.first();
+        row = ui->groupListWidget->row(selectedItem);
+        return idItem = ui->groupListWidget->item(row)->data(Qt::UserRole).toInt();
+    }
+    else {
+        QMessageBox::warning(this, "Ошибка", "Выберите группу для изменения!");
+    }
+}
+
+void MainWindow::actionChangeGroup()
+{
+    if (_dbc->isEmptyFilePath()) {
+        QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
+    }
+    else {
+        groupId = getIdOfSelectedGroup();
+        _editExistGroupWidget->setGroupName(groupId);
+        _editExistGroupWidget->toFillFields();
+        changeStackedWidgetIndex(IndexEditExistGroupWidget);
+    }
+}
+
+void MainWindow::actionDeleteGroup()
+{
+    if (_dbc->isEmptyFilePath()) {
+        QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
+    }
+    else {
+        groupId = getIdOfSelectedGroup();
+        _databaseGroupsRemover->deleteGroup(groupId);
+        setDefaultGroupIdOnStart();
+        _databaseDisplay->showDatabasesGroups(ui->groupListWidget);
+        _databaseDisplay->showNotesByGroupId(ui->notesTableWidget, groupId);
+    }
 }
 
 void MainWindow::on_groupListWidget_itemClicked(QListWidgetItem *item)
 {
-    groupName = item->text();
-    _databaseDisplay->showNotesByGroupName(ui->notesTableWidget, groupName);
+    int row = ui->groupListWidget->row(item);
+    groupId = ui->groupListWidget->item(row)->data(Qt::UserRole).toInt();
+    _databaseDisplay->showNotesByGroupId(ui->notesTableWidget, groupId);
 }
 
+
+
+
+//ДРУГИЕ НАСТРОЙКИ
+
+
+
+
+void MainWindow::actionSort()
+{
+    if (_dbc->isEmptyFilePath()) {
+        QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
+        //TODO
+    }
+}
+
+void MainWindow::actionQuit()
+{
+    close();
+}

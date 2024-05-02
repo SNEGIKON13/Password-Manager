@@ -5,7 +5,7 @@
 #include <QMessageBox>
 
 #include "dbmanagement/databasecontroller.h"
-#include "EnumWidgets.h"
+#include "structures/EnumWidgets.h"
 
 namespace Ui {
 class UnlockBaseWindow;

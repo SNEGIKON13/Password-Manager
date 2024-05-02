@@ -9,7 +9,7 @@
 #include <QSqlError>
 #include <QStandardPaths>
 
-#include "EnumWidgets.h"
+#include "structures/EnumWidgets.h"
 #include "dbmanagement/databasecreator.h"
 
 namespace Ui {

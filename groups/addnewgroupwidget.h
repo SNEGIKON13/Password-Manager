@@ -5,8 +5,8 @@
 #include <QString>
 #include <QMessageBox>
 
-#include "EnumWidgets.h"
-#include "GroupData.h"
+#include "structures/EnumWidgets.h"
+#include "structures/GroupData.h"
 #include "dbmanagement/databasegroupscreator.h"
 
 namespace Ui {

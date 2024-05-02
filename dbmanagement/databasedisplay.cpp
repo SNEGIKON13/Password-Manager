@@ -4,31 +4,33 @@ DatabaseDisplay::DatabaseDisplay(QObject *parent)
     : DatabaseController{parent}
 {}
 
-void DatabaseDisplay::showDatabasesGroups(QListWidget *list)
+void DatabaseDisplay::showDatabasesGroups(QListWidget* list)
 {
-
     openDatabase();
+    list->clear();
     QSqlQuery query;
-    query.exec("SELECT group_name FROM groups");
+    query.exec("SELECT id, group_name FROM groups");
     while (query.next()) {
-        QString groupName = query.value(0).toString();
-        list->addItem(groupName);
+        int idValue = query.value(0).toInt();
+        QString groupName = query.value(1).toString();
+        QListWidgetItem *item = new QListWidgetItem(groupName);
+        item->setData(Qt::UserRole, idValue);
+        list->addItem(item);
     }
     closeDatabase();
 }
 
-void DatabaseDisplay::showNotesByGroupName(QTableWidget *table, const QString& groupName)
+void DatabaseDisplay::showNotesByGroupId(QTableWidget *table, const int groupId)
 {
-
     openDatabase();
     QSqlQuery query;
-    QString queryRequest = "SELECT notes.note_name, notes.login, notes.url, notes.other_notes, notes.last_modified "
+    QString queryRequest = "SELECT notes.id, notes.note_name, notes.login, notes.url, notes.other_notes, notes.last_modified "
                            "FROM notes "
                            "JOIN groups ON notes.group_id = groups.id "
-                           "WHERE groups.group_name = " + QString("'%1'").arg(groupName);
+                           "WHERE groups.id = :groupId";
 
     query.prepare(queryRequest);
-    query.bindValue(":groupName", groupName);
+    query.bindValue(":groupId", groupId);
 
     if (query.exec())
     {
@@ -41,16 +43,16 @@ void DatabaseDisplay::showNotesByGroupName(QTableWidget *table, const QString& g
 
             for (int col = 0; col < 5; ++col)
             {
-                QTableWidgetItem* item = new QTableWidgetItem(query.value(col).toString());
+                QTableWidgetItem *item = new QTableWidgetItem(query.value(col + 1).toString());
                 table->setItem(row, col, item);
             }
 
+            // Добавить свойство "id" к каждой записи
+            int idValue = query.value(0).toInt();
+            table->item(row, 0)->setData(Qt::UserRole, idValue);
+
             ++row;
         }
-    }
-    else
-    {
-        qDebug() << "Error executing query: " << query.lastError().text();
     }
     closeDatabase();
 }

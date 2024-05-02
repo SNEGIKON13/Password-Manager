@@ -1,20 +1,20 @@
-#include "editexistentrywidget.h"
-#include "ui_editexistentrywidget.h"
+#include "notes/editexistnotewidget.h"
+#include "ui_editexistnotewidget.h"
 
-EditExistEntryWidget::EditExistEntryWidget(DatabaseNotesEditor *databaseNotesEditor, QWidget *parent)
-    : QDialog(parent), ui(new Ui::EditExistEntryWidget), databaseNotesEditor(databaseNotesEditor)
+EditExistNoteWidget::EditExistNoteWidget(DatabaseNotesEditor *databaseNotesEditor, QWidget *parent)
+    : QDialog(parent), ui(new Ui::EditExistNoteWidget), databaseNotesEditor(databaseNotesEditor)
 {
     ui->setupUi(this);
 }
 
-EditExistEntryWidget::~EditExistEntryWidget()
+EditExistNoteWidget::~EditExistNoteWidget()
 {
     delete ui;
 }
 
-void EditExistEntryWidget::toFillFields()
+void EditExistNoteWidget::toFillFields()
 {
-    databaseNotesEditor->selectNoteData(nd, noteName, groupName);
+    databaseNotesEditor->selectNoteData(nd, id);
     ui->noteName->setText(nd.noteName);
     ui->userName->setText(nd.userName);
     ui->url->setText(nd.url);
@@ -23,7 +23,7 @@ void EditExistEntryWidget::toFillFields()
     ui->chooseGroup->setCurrentIndex(nd.group_id - 1);
 }
 
-void EditExistEntryWidget::on_buttonBox_accepted()
+void EditExistNoteWidget::on_buttonBox_accepted()
 {
     clearAllExceptId();
 
@@ -75,19 +75,18 @@ void EditExistEntryWidget::on_buttonBox_accepted()
 }
 
 
-void EditExistEntryWidget::on_buttonBox_rejected()
+void EditExistNoteWidget::on_buttonBox_rejected()
 {
     clearAllExceptId();
     emit transmitChangeToMainWindow(IndexMainWindow);
 }
 
-void EditExistEntryWidget::setNoteName(const QString &noteName, const QString &groupName)
+void EditExistNoteWidget::setNoteId(const int noteId)
 {
-    this->noteName = noteName;
-    this->groupName = groupName;
+    this->id = noteId;
 }
 
-void EditExistEntryWidget::populateGroupComboBox()
+void EditExistNoteWidget::populateGroupComboBox()
 {
     ui->chooseGroup->clear();
     QMap<int, QString> groupNames = databaseNotesEditor->getGroupNames();
@@ -99,7 +98,7 @@ void EditExistEntryWidget::populateGroupComboBox()
     ui->chooseGroup->setCurrentIndex(0);
 }
 
-void EditExistEntryWidget::clearAllExceptId()
+void EditExistNoteWidget::clearAllExceptId()
 {
     nd.noteName.clear();
     nd.userName.clear();

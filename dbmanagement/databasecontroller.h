@@ -13,9 +13,9 @@
 #include <QHeaderView>
 #include <QComboBox>
 
-#include "EnumWidgets.h"
-#include "NodeData.h"
-#include "GroupData.h"
+#include "structures/EnumWidgets.h"
+#include "structures/NodeData.h"
+#include "structures/GroupData.h"
 
 class DatabaseController : public QObject
 {
