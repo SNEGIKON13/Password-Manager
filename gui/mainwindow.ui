@@ -119,6 +119,7 @@
     <addaction name="actionCreateDatabase"/>
     <addaction name="actionChooseUnlockingBase"/>
     <addaction name="separator"/>
+    <addaction name="actionChangeDatabase"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -130,7 +131,7 @@
     <addaction name="actionChangeNote"/>
     <addaction name="actionDeleteNote"/>
     <addaction name="separator"/>
-    <addaction name="actionCopyUserName"/>
+    <addaction name="actionCopyUsername"/>
     <addaction name="actionCopyPassword"/>
    </widget>
    <widget class="QMenu" name="menu_3">
@@ -180,7 +181,7 @@
     <string>Удалить запись</string>
    </property>
   </action>
-  <action name="actionCopyUserName">
+  <action name="actionCopyUsername">
    <property name="text">
     <string>Скопировать логин</string>
    </property>
@@ -247,6 +248,11 @@
   <action name="actionAboutProgram">
    <property name="text">
     <string>//О программе//</string>
+   </property>
+  </action>
+  <action name="actionChangeDatabase">
+   <property name="text">
+    <string>Изменить базу данных</string>
    </property>
   </action>
  </widget>

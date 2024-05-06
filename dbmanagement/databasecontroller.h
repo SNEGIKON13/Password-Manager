@@ -25,18 +25,20 @@ public:
 
     QMap<int, QString> getGroupNames();
     static void setFilePath(const QString &filePath);
+    static QString getFilePath();
     bool openDatabase();
     void closeDatabase();
     bool isEmptyFilePath();
+    QString padPassword(const QString& password);
 
     // void sortGroup();
     // void sortNotes();
 
-    // void editExistGroup();
-    // void editExistNote();
+    QString getPassword() const;
+    void setPassword(const QString &newPassword);
 
-    // void encryptDatabase();
-    // void decryptDatabase();
+    QString getTryPassword() const;
+    void setTryPassword(const QString &newTryPassword);  
 
 signals:
     void transmitFilePath(const QString &filePath);
@@ -44,6 +46,8 @@ signals:
 
 protected:
     static QString filePath;
+    static QString password;
+    static QString tryPassword;
     QWidget *parentWidget;
     QSqlDatabase db;
 

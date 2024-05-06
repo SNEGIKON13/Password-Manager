@@ -6,6 +6,10 @@ DatabaseController::DatabaseController(QObject *parent)
 
 QString DatabaseController::filePath;
 
+QString DatabaseController::password;
+
+QString DatabaseController::tryPassword;
+
 QMap<int, QString> DatabaseController::getGroupNames()
 {
     openDatabase();
@@ -59,5 +63,42 @@ bool DatabaseController::isEmptyFilePath()
     else {
         return false;
     }
+}
+
+QString DatabaseController::padPassword(const QString &password)
+{
+    QString paddedPassword = password;
+
+    while (paddedPassword.size() < 32)
+    {
+        paddedPassword += '\0';
+    }
+
+    return paddedPassword;
+}
+
+QString DatabaseController::getPassword() const
+{
+    return password;
+}
+
+void DatabaseController::setPassword(const QString &newPassword)
+{
+    password = newPassword;
+}
+
+QString DatabaseController::getTryPassword() const
+{
+    return tryPassword;
+}
+
+void DatabaseController::setTryPassword(const QString &newTryPassword)
+{
+    tryPassword = newTryPassword;
+}
+
+QString DatabaseController::getFilePath()
+{
+    return filePath;
 }
 

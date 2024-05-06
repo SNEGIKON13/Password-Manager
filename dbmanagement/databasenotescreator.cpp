@@ -1,4 +1,4 @@
-#include "dbmanagement/databasenotescreator.h"
+    #include "dbmanagement/databasenotescreator.h"
 
 DatabaseNotesCreator::DatabaseNotesCreator(QObject *parent)
     : DatabaseController{parent}

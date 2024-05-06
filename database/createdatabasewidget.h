@@ -1,5 +1,5 @@
-#ifndef CREATEBASEWIDGET_H
-#define CREATEBASEWIDGET_H
+#ifndef CREATEDATABASEWIDGET_H
+#define CREATEDATABASEWIDGET_H
 
 #include <QDialog>
 #include <QMessageBox>
@@ -10,19 +10,20 @@
 #include <QStandardPaths>
 
 #include "structures/EnumWidgets.h"
+#include "database/settingsmanager.h"
 #include "dbmanagement/databasecreator.h"
 
 namespace Ui {
-class CreateBaseWidget;
+class CreateDatabaseWidget;
 }
 
-class CreateBaseWidget : public QDialog
+class CreateDatabaseWidget : public QDialog
 {
     Q_OBJECT
 
 public:
-     CreateBaseWidget(DatabaseCreator* databaseCreator, QWidget* parent = nullptr);
-    ~CreateBaseWidget();
+     CreateDatabaseWidget(DatabaseCreator* databaseCreator, QWidget* parent = nullptr);
+    ~CreateDatabaseWidget();
 
 private slots:
     void on_buttonBox_accepted();
@@ -30,10 +31,10 @@ private slots:
     void on_buttonBox_rejected();
 
 private:
-    Ui::CreateBaseWidget *ui;
+    Ui::CreateDatabaseWidget *ui;
     QString baseName, basePassword, queryRequest;
     DatabaseCreator *databaseCreator;
 
 };
 
-#endif // CREATEBASEWIDGET_H
+#endif // CREATEDATABASEWIDGET_H

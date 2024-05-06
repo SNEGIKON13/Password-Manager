@@ -9,12 +9,17 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    database/editdatabasewidget.cpp \
+    database/unlockdatabasewidget.cpp \
     database/welcomewidget.cpp \
-    database/createbasewidget.cpp \
-    database/unlockbasewidget.cpp \
+    database/createdatabasewidget.cpp \
     database/settingsmanager.cpp \
-    deletegroupwarning.cpp \
+    dbmanagement/databasedecryptor.cpp \
+    dbmanagement/databaseeditor.cpp \
+    dbmanagement/databaseencryptor.cpp \
+    dbmanagement/databaseshortcutsselecter.cpp \
     notes/addnewnotewidget.cpp \
+    notes/editexistnotewidget.cpp \
     groups/addnewgroupwidget.cpp \
     groups/editexistgroupwidget.cpp \
     dbmanagement/databasecontroller.cpp \
@@ -26,21 +31,30 @@ SOURCES += \
     dbmanagement/databasenotescreator.cpp \
     dbmanagement/databasenoteseditor.cpp \
     dbmanagement/databasenotesremover.cpp \
+    other/deletegroupwarning.cpp \
+    other/checkifdatabaseexistwarning.cpp \
     main.cpp \
     mainwindow.cpp \
-    notes/editexistnotewidget.cpp
+    aes256/AES256.cpp \
+    aes256/AES256_Base.cpp \
+    aes256/AES256_PRNG.cpp \
+    aes256/S_Box.cpp
 
 
 HEADERS += \
-    deletegroupwarning.h \
+    database/unlockdatabasewidget.h \
+    dbmanagement/databasedecryptor.h \
+    dbmanagement/databaseeditor.h \
+    dbmanagement/databaseencryptor.h \
+    dbmanagement/databaseshortcutsselecter.h \
     notes/addnewnotewidget.h \
     notes/editexistnotewidget.h \
     structures/EnumWidgets.h \
     structures/GroupData.h \
     structures/NodeData.h \
+    database/editdatabasewidget.h \
     database/welcomewidget.h \
-    database/createbasewidget.h \
-    database/unlockbasewidget.h \
+    database/createdatabasewidget.h \
     database/settingsmanager.h \
     groups/addnewgroupwidget.h \
     groups/editexistgroupwidget.h \
@@ -53,18 +67,30 @@ HEADERS += \
     dbmanagement/databasenotescreator.h \
     dbmanagement/databasenoteseditor.h \
     dbmanagement/databasenotesremover.h \
-    mainwindow.h
+    other/deletegroupwarning.h \
+    other/checkifdatabaseexistwarning.h \
+    mainwindow.h \
+    aes256/AES256.hpp \
+    aes256/AES256_Base.hpp \
+    aes256/AES256_PRNG.hpp \
+    aes256/Byte_Block.hpp \
+    aes256/Padding_Type.hpp \
+    aes256/S_Box.hpp
+
 
 FORMS += \
-    addnewgroupwidget.ui \
-    addnewnotewidget.ui \
-    createbasewidget.ui \
-    deletegroupwarning.ui \
-    editexistgroupwidget.ui \
-    editexistnotewidget.ui \
-    mainwindow.ui \
-    unlockbasewidget.ui \
-    welcomewidget.ui
+    gui/checkifdatabaseexistwarning.ui \
+    gui/addnewgroupwidget.ui \
+    gui/addnewnotewidget.ui \
+    gui/createdatabasewidget.ui \
+    gui/editdatabasewidget.ui \
+    gui/deletegroupwarning.ui \
+    gui/editexistgroupwidget.ui \
+    gui/editexistnotewidget.ui \
+    gui/mainwindow.ui \
+    gui/unlockdatabasewidget.ui \
+    gui/welcomewidget.ui
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

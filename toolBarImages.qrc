@@ -12,5 +12,7 @@
         <file>Images/Quit.png</file>
         <file>Images/Sort.png</file>
         <file>Images/UnlockDatabase.png</file>
+        <file>Images/ChangeDatabase.png</file>
+        <file>Images/copyToClipboard.png</file>
     </qresource>
 </RCC>

@@ -4,11 +4,13 @@
 #include <QMainWindow>
 #include <QKeyEvent>
 #include <QAbstractButton>
+#include <QCloseEvent>
 #include <QToolBar>
 
 #include "database/welcomewidget.h"
-#include "database/unlockbasewidget.h"
-#include "database/createbasewidget.h"
+#include "database/createdatabasewidget.h"
+#include "database/unlockdatabasewidget.h"
+#include "database/editdatabasewidget.h"
 #include "database/settingsmanager.h"
 #include "notes/addnewnotewidget.h"
 #include "notes/editexistnotewidget.h"
@@ -24,8 +26,11 @@
 #include "dbmanagement/databasedisplay.h"
 #include "dbmanagement/databasenotesremover.h"
 #include "dbmanagement/databasegroupsremover.h"
+#include "dbmanagement/databaseencryptor.h"
+#include "dbmanagement/databasedecryptor.h"
+#include "dbmanagement/databaseshortcutsselecter.h"
 
-#include "deletegroupwarning.h"
+#include "other/deletegroupwarning.h"
 
 
 #include "structures/EnumWidgets.h"
@@ -41,7 +46,6 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    void extracted();
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
@@ -50,14 +54,18 @@ public slots:
     void activatePopUpWidget(int index);
     void actionCreateDatabase();
     void actionChooseUnlockingBase();
+    void actionChangeDatabase();
+    void actionQuit();
     void actionCreateNewNote();
     void actionChangeNote();
     void actionDeleteNote();
     void actionCreateGroup();
     void actionChangeGroup();
     void actionDeleteGroup();
+    void actionCopyUsername();
+    void actionCopyPassword();
     void actionSort();
-    void actionQuit();
+
     void receiveFilePath(const QString &fp);
     void receivePossibleFilePath(const QString &fp);
     void unlockBase();
@@ -90,19 +98,19 @@ private slots:
     void MWC_CreationOfDatabaseControllers();
     void mustDeleteGroup();
 
-
-    void keyPressEvent(QKeyEvent *event);
+    void keyPressEvent(QKeyEvent *event) override;
+    void closeEvent(QCloseEvent *event) override;
 
     void keyDeleteNote(const int noteId);
     void whichGroupToShow();
-
     void toShowGroupOfNewNote();
 
 private:
     Ui::MainWindow *ui;
     WelcomeWidget *_welcomeWidget;
-    UnlockBaseWindow *_unlockBaseWidget;
-    CreateBaseWidget *_createBaseWidget;
+    CreateDatabaseWidget *_createDatabaseWidget;
+    UnlockDatabaseWidget *_unlockDatabaseWidget;
+    EditDatabaseWidget *_editDatabaseWidget;
     AddNewNoteWidget *_addNewNoteWidget;
     EditExistNoteWidget *_editExistNoteWidget;
     AddNewGroupWidget *_addNewGroupWidget;
@@ -117,10 +125,13 @@ private:
     DatabaseDisplay *_databaseDisplay;
     DatabaseNotesRemover *_databaseNotesRemover;
     DatabaseGroupsRemover *_databaseGroupsRemover;
+    DatabaseEncryptor *_databaseEncryptor;
+    DatabaseDecryptor *_databaseDecryptor;
+    DatabaseShortcutsSelecter *_databaseShortcutsSelecter;
 
     DeleteGroupWarning *_deleteGroupWarning;
 
-    QString filePath, possibleFilePath;
+    QString possibleFilePath;
     QStringList recentDatabases;
     QToolBar *_toolbar;
     QStringList headerLabels

@@ -1,4 +1,4 @@
-#include "deletegroupwarning.h"
+#include "other/deletegroupwarning.h"
 #include "ui_deletegroupwarning.h"
 
 DeleteGroupWarning::DeleteGroupWarning(QWidget *parent)

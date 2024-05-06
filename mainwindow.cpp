@@ -7,6 +7,10 @@ void MainWindow::MWC_ConnectOfQActions()
             this, &MainWindow::actionCreateDatabase);
     connect(ui->actionChooseUnlockingBase, &QAction::triggered,
             this, &MainWindow::actionChooseUnlockingBase);
+    connect(ui->actionChangeDatabase, &QAction::triggered,
+            this, &MainWindow::actionChangeDatabase);
+    connect(ui->actionQuit, &QAction::triggered,
+            this, &MainWindow::actionQuit);
     connect(ui->actionCreateNewNote, &QAction::triggered,
             this, &MainWindow::actionCreateNewNote);
     connect(ui->actionChangeNote, &QAction::triggered,
@@ -19,10 +23,12 @@ void MainWindow::MWC_ConnectOfQActions()
             this, &MainWindow::actionChangeGroup);
     connect(ui->actionDeleteGroup, &QAction::triggered,
             this, &MainWindow::actionDeleteGroup);
+    connect(ui->actionCopyUsername, &QAction::triggered,
+            this, &MainWindow::actionCopyUsername);
+    connect(ui->actionCopyPassword, &QAction::triggered,
+            this, &MainWindow::actionCopyPassword);
     connect(ui->actionSort, &QAction::triggered,
             this, &MainWindow::actionSort);
-    connect(ui->actionQuit, &QAction::triggered,
-            this, &MainWindow::actionQuit);
 }
 
 void MainWindow::MWC_InsertStackedWidgets()
@@ -47,14 +53,18 @@ void MainWindow::MWC_CreationOfDatabaseControllers()
     _databaseDisplay = new DatabaseDisplay(this);
     _databaseNotesRemover = new DatabaseNotesRemover(this);
     _databaseGroupsRemover = new DatabaseGroupsRemover(this);
+    _databaseEncryptor = new DatabaseEncryptor(this);
+    _databaseDecryptor = new DatabaseDecryptor(this);
+    _databaseShortcutsSelecter = new DatabaseShortcutsSelecter(this);
 }
 
 void MainWindow::MWC_CreationOfUiForms()
 {
     _welcomeWidget = new WelcomeWidget(this);
     _welcomeWidget->showRecentDatabases();
-    _unlockBaseWidget = new UnlockBaseWindow(this);
-    _createBaseWidget = new CreateBaseWidget(_databaseCreator, this);
+    _unlockDatabaseWidget = new UnlockDatabaseWidget(this);
+    _createDatabaseWidget = new CreateDatabaseWidget(_databaseCreator, this);
+    _editDatabaseWidget = new EditDatabaseWidget(this);
     _addNewNoteWidget = new AddNewNoteWidget(_databaseNotesCreator, this);
     _editExistNoteWidget = new EditExistNoteWidget(_databaseNotesEditor, this);
     _addNewGroupWidget = new AddNewGroupWidget(_databaseGroupsCreator, this);
@@ -71,7 +81,7 @@ void MainWindow::MWC_ConnectOfPushButtons()
             this, &MainWindow::activatePopUpWidget);
     connect(_databaseCreator, &DatabaseCreator::transmitChangeToMainWindow,
             this, &MainWindow::changeStackedWidgetIndex);
-    connect(_unlockBaseWidget, &UnlockBaseWindow::transmitChangeToMainWindow,
+    connect(_unlockDatabaseWidget, &UnlockDatabaseWidget::transmitChangeToMainWindow,
             this, &MainWindow::changeStackedWidgetIndex);
 }
 
@@ -79,7 +89,7 @@ void MainWindow::MWC_ConnectsOther()
 {
     connect(_welcomeWidget, &WelcomeWidget::transmitFilePath,
             this, &MainWindow::receivePossibleFilePath);
-    connect(_unlockBaseWidget, &UnlockBaseWindow::transmitDataBasePath,
+    connect(_unlockDatabaseWidget, &UnlockDatabaseWidget::transmitDataBasePath,
             this, &MainWindow::receiveFilePath);
     connect(_databaseCreator, &DatabaseCreator::transmitFilePath,
             this, &MainWindow::receiveFilePath);
@@ -133,6 +143,8 @@ void MainWindow::MWC_CreationOfToolBar()
     ui->actionCreateDatabase->setIcon(QIcon("://Images/CreateDatabase.png"));
     _toolbar->addAction(ui->actionChooseUnlockingBase);
     ui->actionChooseUnlockingBase->setIcon(QIcon("://Images/LockDatabase.png"));
+    _toolbar->addAction(ui->actionChangeDatabase);
+    ui->actionChangeDatabase->setIcon(QIcon("://Images/ChangeDatabase.png"));
 
     _toolbar->addWidget(spacer1);
     _toolbar->addWidget(separator1);
@@ -154,6 +166,12 @@ void MainWindow::MWC_CreationOfToolBar()
     ui->actionChangeGroup->setIcon(QIcon("://Images/ChangeGroup.png"));
     _toolbar->addAction(ui->actionDeleteGroup);
     ui->actionDeleteGroup->setIcon(QIcon("://Images/DeleteGroup.png"));
+
+    ui->actionCopyPassword->setShortcut(QKeySequence("Ctrl+C"));
+    ui->actionCopyPassword->setIcon(QIcon("://Images/copyToClipboard.png"));
+    ui->actionCopyUsername->setShortcut(QKeySequence("Ctrl+B"));
+    ui->actionCopyUsername->setIcon(QIcon("://Images/copyToClipboard.png"));
+
 
     _toolbar->addWidget(spacer1);
     _toolbar->addWidget(separator3);
@@ -205,6 +223,16 @@ MainWindow::~MainWindow()
 
 
 
+
+void MainWindow::closeEvent(QCloseEvent *event)  {
+    if (ui->stackedWidget->currentIndex() == IndexMainWindow) {
+        _databaseEncryptor->encryptDatabase();
+        QMainWindow::closeEvent(event);
+    }
+    else {
+        QMainWindow::closeEvent(event);
+    }
+}
 
 void MainWindow::changeStackedWidgetIndex(int index)
 {
@@ -294,13 +322,13 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 
 void MainWindow::unlockBase()
 {
-    _unlockBaseWidget->receiveFilePath(possibleFilePath);
-    _unlockBaseWidget->show();
+    _unlockDatabaseWidget->receiveFilePath(possibleFilePath);
+    _unlockDatabaseWidget->show();
 }
 
 void MainWindow::createBase()
 {
-    _createBaseWidget->show();
+    _createDatabaseWidget->show();
 }
 
 void MainWindow::showDatabasesGroups()
@@ -326,10 +354,9 @@ void MainWindow::receivePossibleFilePath(const QString &fp)
 void MainWindow::saveNewFilePath()
 {
     recentDatabases = SettingsManager::loadRecentDatabases();
-    if (!filePath.isEmpty() && !recentDatabases.contains(filePath))
+    if (!DatabaseController::getFilePath().isEmpty() && !recentDatabases.contains(DatabaseController::getFilePath()))
     {
-        recentDatabases.prepend(filePath);
-        filePath.clear();
+        recentDatabases.prepend(DatabaseController::getFilePath());;
         SettingsManager::saveRecentDatabases(recentDatabases);
         _welcomeWidget->showRecentDatabases();
     }
@@ -337,7 +364,7 @@ void MainWindow::saveNewFilePath()
 
 void MainWindow::setDatabaseNameText()
 {
-    ui->baseName->setText(filePath);
+    ui->baseName->setText(DatabaseController::getFilePath());
     QFont font;
     font.setPointSize(12);
     ui->baseName->setFont(font);
@@ -355,10 +382,9 @@ void MainWindow::setDefaultGroupIdOnStart()
 
 void MainWindow::receiveFilePath(const QString &fp)
 {
-    filePath = fp;
+    DatabaseController::setFilePath(fp);
     setDatabaseNameText();
     saveNewFilePath();
-    DatabaseController::setFilePath(fp);
 }
 
 
@@ -371,13 +397,40 @@ void MainWindow::receiveFilePath(const QString &fp)
 
 void MainWindow::actionCreateDatabase()
 {
-    _createBaseWidget->show();
+    if (ui->stackedWidget->currentIndex() == IndexMainWindow) {
+        _databaseEncryptor->encryptDatabase();
+        changeStackedWidgetIndex(IndexWelcomeWidget);
+        _createDatabaseWidget->show();
+    }
+    else {
+        changeStackedWidgetIndex(IndexWelcomeWidget);
+        _createDatabaseWidget->show();
+    }
 }
 
 void MainWindow::actionChooseUnlockingBase()
 {
-    changeStackedWidgetIndex(IndexWelcomeWidget);
-    _welcomeWidget->showRecentDatabases();
+    if (ui->stackedWidget->currentIndex() == IndexMainWindow) {
+        _databaseEncryptor->encryptDatabase();
+        changeStackedWidgetIndex(IndexWelcomeWidget);
+        _welcomeWidget->showRecentDatabases();
+    }
+    else {
+        changeStackedWidgetIndex(IndexWelcomeWidget);
+        _welcomeWidget->showRecentDatabases();
+    }
+}
+
+void MainWindow::actionChangeDatabase()
+{
+    if (ui->stackedWidget->currentIndex() == IndexMainWindow && !_dbc->isEmptyFilePath()) {
+        _editDatabaseWidget->exec();
+        setDatabaseNameText();
+        saveNewFilePath();
+    }
+    else {
+        QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
+    }
 }
 
 
@@ -453,7 +506,6 @@ void MainWindow::keyDeleteNote(const int noteId) {
 
 
 
-
 void MainWindow::setNewGroupItem()
 {
     int indexOfLastElement = ui->groupListWidget->count() - 1;
@@ -521,6 +573,22 @@ void MainWindow::actionDeleteGroup()
     }
 }
 
+void MainWindow::actionCopyUsername()
+{
+    if (ui->stackedWidget->currentIndex() == IndexMainWindow) {
+        noteId = getIdOfSelectedNote();
+        _databaseShortcutsSelecter->copyUsernameToClipboard(noteId);
+    }
+}
+
+void MainWindow::actionCopyPassword()
+{
+    if (ui->stackedWidget->currentIndex() == IndexMainWindow) {
+        noteId = getIdOfSelectedNote();
+        _databaseShortcutsSelecter->copyPasswordToClipboard(noteId);
+    }
+}
+
 void MainWindow::on_groupListWidget_itemClicked(QListWidgetItem *item)
 {
     int row = ui->groupListWidget->row(item);
@@ -546,5 +614,12 @@ void MainWindow::actionSort()
 
 void MainWindow::actionQuit()
 {
-    close();
+    if (ui->stackedWidget->currentIndex() == IndexMainWindow) {
+        _databaseEncryptor->encryptDatabase();
+        close();
+    }
+    else {
+        close();
+    }
+
 }

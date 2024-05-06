@@ -70,8 +70,9 @@ void WelcomeWidget::on_listWidget_itemClicked(QListWidgetItem *item)
 
 void WelcomeWidget::on_deleteAllNonExistDb_clicked()
 {
-    for (int i = 0; i < ui->listWidget->count(); ++i) {
-        QString itemText = ui->listWidget->item(i)->text();
+    for (int recentDatabasesCount = ui->listWidget->count() - 1;
+         recentDatabasesCount >= 0; --recentDatabasesCount) {
+        QString itemText = ui->listWidget->item(recentDatabasesCount)->text();
         QFile databaseFile(itemText);
         if (!databaseFile.exists()) {
             recentDatabases = SettingsManager::deleteOneListItem(itemText);
@@ -80,4 +81,3 @@ void WelcomeWidget::on_deleteAllNonExistDb_clicked()
         }
     }
 }
-

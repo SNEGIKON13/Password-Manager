@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>UnlockBaseWindow</class>
- <widget class="QDialog" name="UnlockBaseWindow">
+ <class>UnlockDatabaseWidget</class>
+ <widget class="QDialog" name="UnlockDatabaseWidget">
   <property name="windowModality">
    <enum>Qt::ApplicationModal</enum>
   </property>
