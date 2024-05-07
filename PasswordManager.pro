@@ -33,6 +33,7 @@ SOURCES += \
     dbmanagement/databasenotesremover.cpp \
     other/deletegroupwarning.cpp \
     other/checkifdatabaseexistwarning.cpp \
+    other/aboutprogramwidget.cpp \
     main.cpp \
     mainwindow.cpp \
     aes256/AES256.cpp \
@@ -69,6 +70,7 @@ HEADERS += \
     dbmanagement/databasenotesremover.h \
     other/deletegroupwarning.h \
     other/checkifdatabaseexistwarning.h \
+    other/aboutprogramwidget.h \
     mainwindow.h \
     aes256/AES256.hpp \
     aes256/AES256_Base.hpp \
@@ -79,6 +81,7 @@ HEADERS += \
 
 
 FORMS += \
+    gui/aboutprogramwidget.ui \
     gui/checkifdatabaseexistwarning.ui \
     gui/addnewgroupwidget.ui \
     gui/addnewnotewidget.ui \

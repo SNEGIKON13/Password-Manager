@@ -10,14 +10,13 @@ void DatabaseEditor::updateDatabaseName(CheckIfDatabaseExistWarning *checkIfData
         QString filePath = DatabaseController::getFilePath();
         QFileInfo fileInfo(filePath);
         QString newFilePath = fileInfo.path() + '/' + newBaseName + "." + fileInfo.suffix();
-        // Проверка, существует ли файл базы данных с новым именем
         if (QFile::exists(newFilePath)) {
             checkIfDatabaseExistWarning->show();
             if (deleleAndRename) {
                 bool removeSuccess = QFile::remove(newFilePath);
                 if (!removeSuccess) {
                     QMessageBox::warning(widget, "Ошибка", "Ошибка при удалении существующего файла базы данных");
-                    return; // Прерывание операции, если удаление не удалось
+                    return;
                 }
                 bool success = QFile::rename(filePath, newFilePath);
                 if (success) {

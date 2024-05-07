@@ -37,4 +37,4 @@ private:
 
 };
 
-#endif // CREATEDATABASEWIDGET_H
+#endif //CREATEDATABASEWIDGET_H

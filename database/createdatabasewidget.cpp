@@ -37,7 +37,7 @@ void CreateDatabaseWidget::on_buttonBox_accepted()
             databaseCreator->setFilePath(filePath);
             databaseCreator->createDatabase();
         } else {
-            QMessageBox::warning(this, "Ошибка", "Ошибка при создании базы данных");
+            return;
         }
         SettingsManager::savePasswordHash(baseName, basePassword);
         clear_all();

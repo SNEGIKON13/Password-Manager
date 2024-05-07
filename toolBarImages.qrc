@@ -14,5 +14,6 @@
         <file>Images/UnlockDatabase.png</file>
         <file>Images/ChangeDatabase.png</file>
         <file>Images/copyToClipboard.png</file>
+        <file>Images/ApplicationIcon.jpg</file>
     </qresource>
 </RCC>

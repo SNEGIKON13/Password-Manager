@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QSettings>
 #include <QCryptographicHash>
+#include <QRandomGenerator>
 
 class SettingsManager
 {
@@ -20,14 +21,15 @@ public:
     static void savePasswordHash(const QString &dbName, const QString &password);
 
 private slots:
-    static QByteArray hashPassword(const QString &password);
-
+    static QByteArray hashNewPassword(const QString &password);
     static QString creatingNewRecordName(const QString &oldFilePath);
+    static QByteArray generateSalt();
+    static QByteArray hashPasswordEntry(const QString& password, const QByteArray& salt);
 
 private:
     static QString recentDatabasesKey;
     static QSettings settings;
-    // static QStringList recentDatabases;
+    static const int kSaltLength = 16;
 };
 
 #endif // SETTINGSMANAGER_H

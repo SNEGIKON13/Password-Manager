@@ -9,8 +9,6 @@ void MainWindow::MWC_ConnectOfQActions()
             this, &MainWindow::actionChooseUnlockingBase);
     connect(ui->actionChangeDatabase, &QAction::triggered,
             this, &MainWindow::actionChangeDatabase);
-    connect(ui->actionQuit, &QAction::triggered,
-            this, &MainWindow::actionQuit);
     connect(ui->actionCreateNewNote, &QAction::triggered,
             this, &MainWindow::actionCreateNewNote);
     connect(ui->actionChangeNote, &QAction::triggered,
@@ -29,6 +27,10 @@ void MainWindow::MWC_ConnectOfQActions()
             this, &MainWindow::actionCopyPassword);
     connect(ui->actionSort, &QAction::triggered,
             this, &MainWindow::actionSort);
+    connect(ui->actionAboutProgram, &QAction::triggered,
+            this, &MainWindow::actionAboutProgram);
+    connect(ui->actionQuit, &QAction::triggered,
+            this, &MainWindow::actionQuit);
 }
 
 void MainWindow::MWC_InsertStackedWidgets()
@@ -462,6 +464,7 @@ int MainWindow::getIdOfSelectedNote()
         row = selectedItem->row();
         return idItem = ui->notesTableWidget->item(row, 0)->data(Qt::UserRole).toInt();
     }
+    return -999;
 }
 
 void MainWindow::actionChangeNote()
@@ -533,6 +536,7 @@ int MainWindow::getIdOfSelectedGroup()
         row = ui->groupListWidget->row(selectedItem);
         return idItem = ui->groupListWidget->item(row)->data(Qt::UserRole).toInt();
     }
+    return -999;
 }
 
 void MainWindow::actionChangeGroup()
@@ -598,7 +602,6 @@ void MainWindow::on_groupListWidget_itemClicked(QListWidgetItem *item)
 
 
 
-
 //ДРУГИЕ НАСТРОЙКИ
 
 
@@ -608,8 +611,15 @@ void MainWindow::actionSort()
 {
     if (_dbc->isEmptyFilePath()) {
         QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
-        //TODO
+        //TODOMAYBE
     }
+}
+
+void MainWindow::actionAboutProgram()
+{
+    AboutProgramWidget *aboutProgramWidget;
+    aboutProgramWidget = new AboutProgramWidget(this);
+    aboutProgramWidget->show();
 }
 
 void MainWindow::actionQuit()

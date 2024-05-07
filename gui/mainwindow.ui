@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>PasswordManager</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../toolBarImages.qrc">
+    <normaloff>:/Images/ApplicationIcon.jpg</normaloff>:/Images/ApplicationIcon.jpg</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
@@ -247,7 +251,7 @@
   </action>
   <action name="actionAboutProgram">
    <property name="text">
-    <string>//О программе//</string>
+    <string>О программе</string>
    </property>
   </action>
   <action name="actionChangeDatabase">
@@ -256,6 +260,8 @@
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="../toolBarImages.qrc"/>
+ </resources>
  <connections/>
 </ui>

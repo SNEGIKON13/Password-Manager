@@ -31,6 +31,7 @@
 #include "dbmanagement/databaseshortcutsselecter.h"
 
 #include "other/deletegroupwarning.h"
+#include "other/aboutprogramwidget.h"
 
 
 #include "structures/EnumWidgets.h"
@@ -65,6 +66,7 @@ public slots:
     void actionCopyUsername();
     void actionCopyPassword();
     void actionSort();
+    void actionAboutProgram();
 
     void receiveFilePath(const QString &fp);
     void receivePossibleFilePath(const QString &fp);

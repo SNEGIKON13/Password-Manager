@@ -11,7 +11,6 @@ void DatabaseGroupsRemover::deleteGroup(const int groupId)
     query.prepare("DELETE FROM groups WHERE id = :groupId");
     query.bindValue(":groupId", groupId);
     if (query.exec()) {
-        // Записи успешно удалены
     } else {
         closeDatabase();
         throw std::runtime_error("Ошибка при удалении записей группы");
@@ -25,7 +24,6 @@ void DatabaseGroupsRemover::deleteNotesByGroupId(int groupId) {
         query.prepare("DELETE FROM notes WHERE group_id = :groupId");
         query.bindValue(":groupId", groupId);
         if (query.exec()) {
-            // Успешно удалено
         } else {
             closeDatabase();
             throw std::runtime_error("Ошибка при удалении записей группы");

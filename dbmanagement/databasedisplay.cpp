@@ -28,7 +28,6 @@ void DatabaseDisplay::showNotesByGroupId(QTableWidget *table, const int groupId)
                            "FROM notes "
                            "JOIN groups ON notes.group_id = groups.id "
                            "WHERE groups.id = :groupId";
-
     query.prepare(queryRequest);
     query.bindValue(":groupId", groupId);
 
@@ -40,17 +39,14 @@ void DatabaseDisplay::showNotesByGroupId(QTableWidget *table, const int groupId)
         while (query.next())
         {
             table->insertRow(row);
-
             for (int col = 0; col < 5; ++col)
             {
                 QTableWidgetItem *item = new QTableWidgetItem(query.value(col + 1).toString());
                 table->setItem(row, col, item);
             }
 
-            // Добавить свойство "id" к каждой записи
             int idValue = query.value(0).toInt();
             table->item(row, 0)->setData(Qt::UserRole, idValue);
-
             ++row;
         }
     }

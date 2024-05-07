@@ -11,10 +11,9 @@ void DatabaseNotesRemover::deleteNote(const int noteId)
     query.prepare("DELETE FROM notes WHERE id = :id");
     query.bindValue(":id", noteId);
     if (query.exec()) {
-        // Запись успешно удалена
     } else {
-        closeDatabase();  // Закрыть соединение с базой данных перед выбросом исключения
-        throw std::runtime_error("Ошибка при удалении записи");  // Бросить исключение
+        closeDatabase();
+        throw std::runtime_error("Ошибка при удалении записи");
     }
     closeDatabase();
 }
