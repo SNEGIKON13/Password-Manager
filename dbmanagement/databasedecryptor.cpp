@@ -9,13 +9,14 @@ bool DatabaseDecryptor::decryptDatabase()
     QFile databaseFile(filePath);
     if (databaseFile.open(QIODevice::ReadOnly))
     {
-        QByteArray databaseContent = databaseFile.readAll();
+        QByteArray encryptedDataWithIV = databaseFile.readAll();
         databaseFile.close();
-        AES256 aes(tryPassword.toStdString());
-
+        QByteArray iv = encryptedDataWithIV.left(16);
+        AES256 aes(tryPassword.toStdString(), iv.toStdString());
+        QByteArray encryptedData = encryptedDataWithIV.mid(16);
         std::string decryptedData;
         try {
-            decryptedData = aes.decrypt(databaseContent.toStdString());
+            decryptedData = aes.decrypt(encryptedData.toStdString());
         } catch (const std::invalid_argument& e) {
             return false;
         }

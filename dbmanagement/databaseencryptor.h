@@ -5,6 +5,7 @@
 #include <QDataStream>
 #include <QString>
 #include <QByteArray>
+#include <QRandomGenerator>
 
 #include "aes256/AES256.hpp"
 
@@ -15,6 +16,10 @@ class DatabaseEncryptor : public DatabaseController
 public:
     explicit DatabaseEncryptor(QObject *parent = nullptr);
     void encryptDatabase();
+    QByteArray generateIV();
+
+private:
+    const int kIvLength = 16;
 };
 
 #endif // DATABASEENCRYPTOR_H
