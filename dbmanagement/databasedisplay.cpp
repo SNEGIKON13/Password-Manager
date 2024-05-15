@@ -24,7 +24,7 @@ void DatabaseDisplay::showNotesByGroupId(QTableWidget *table, const int groupId)
 {
     openDatabase();
     QSqlQuery query;
-    QString queryRequest = "SELECT notes.id, notes.note_name, notes.login, notes.url, notes.other_notes, notes.last_modified "
+    QString queryRequest = "SELECT notes.id, notes.note_name, notes.login, notes.url, notes.other_notes, notes.updated_at "
                            "FROM notes "
                            "JOIN groups ON notes.group_id = groups.id "
                            "WHERE groups.id = :groupId";

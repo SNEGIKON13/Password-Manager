@@ -10,8 +10,8 @@
 #include <QStandardPaths>
 
 #include "structures/EnumWidgets.h"
-#include "database/settingsmanager.h"
 #include "dbmanagement/databasecreator.h"
+#include "database/hashingmanager.h"
 
 namespace Ui {
 class CreateDatabaseWidget;

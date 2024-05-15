@@ -32,7 +32,7 @@ void DatabaseCreator::createQueryNotesTable() {
                            "url VARCHAR(64),"
                            "password VARCHAR(64) NOT NULL,"
                            "other_notes VARCHAR(500),"
-                           "last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"
+                           "updated_at TIMESTAMP,"
                            "FOREIGN KEY (group_id) REFERENCES groups(id)"
                            ")";
     query.exec(queryRequest);

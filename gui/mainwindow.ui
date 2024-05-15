@@ -146,7 +146,6 @@
     <addaction name="actionChangeGroup"/>
     <addaction name="actionDeleteGroup"/>
     <addaction name="separator"/>
-    <addaction name="actionSort"/>
    </widget>
    <widget class="QMenu" name="menu_4">
     <property name="title">

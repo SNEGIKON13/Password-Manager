@@ -1,4 +1,4 @@
-#include "databasecontroller.h"
+    #include "databasecontroller.h"
 
 DatabaseController::DatabaseController(QObject *parent)
     : QObject{parent}
@@ -28,6 +28,38 @@ QMap<int, QString> DatabaseController::getGroupNames()
     return groupMap;
 }
 
+int DatabaseController::findGroupIDdByGroupName(QString comboText)
+{
+    openDatabase();
+    QSqlQuery query;
+    int groupId;
+    query.prepare("SELECT id FROM groups WHERE group_name = :gr");
+    query.bindValue(":gr", comboText);
+    if (query.exec()) {
+        if (query.next()) {
+            closeDatabase();
+            return groupId = query.value(0).toInt();
+        }
+    }
+    closeDatabase();
+    return -999;
+}
+
+QString DatabaseController::findGroupNameByGroupID(int id)
+{
+    openDatabase();
+    QSqlQuery query;
+    QString groupName = "ERROR";
+    query.prepare("SELECT group_name FROM groups WHERE id = :id");
+    query.bindValue(":id", id);
+    if (query.exec()) {
+        if (query.next()) {
+            return groupName = query.value(0).toString();
+        }
+    }
+    return groupName;
+    closeDatabase();
+}
 
 void DatabaseController::setFilePath(const QString &filePath)
 {
@@ -63,6 +95,11 @@ bool DatabaseController::isEmptyFilePath()
     else {
         return false;
     }
+}
+
+void DatabaseController::clearFilePath()
+{
+    filePath.clear();
 }
 
 QString DatabaseController::padPassword(const QString &password)

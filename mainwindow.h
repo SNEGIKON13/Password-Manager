@@ -11,7 +11,8 @@
 #include "database/createdatabasewidget.h"
 #include "database/unlockdatabasewidget.h"
 #include "database/editdatabasewidget.h"
-#include "database/settingsmanager.h"
+#include "database/hashingmanager.h"
+#include "database/recentdatabasemanager.h"
 #include "notes/addnewnotewidget.h"
 #include "notes/editexistnotewidget.h"
 #include "groups/addnewgroupwidget.h"
@@ -32,7 +33,6 @@
 
 #include "other/deletegroupwarning.h"
 #include "other/aboutprogramwidget.h"
-
 
 #include "structures/EnumWidgets.h"
 
@@ -65,7 +65,6 @@ public slots:
     void actionDeleteGroup();
     void actionCopyUsername();
     void actionCopyPassword();
-    void actionSort();
     void actionAboutProgram();
 
     void receiveFilePath(const QString &fp);
@@ -73,6 +72,7 @@ public slots:
     void unlockBase();
 
     void setNewGroupItem();
+    void setGroupId(int newGroupId);
 
 private slots:
     void createBase();
@@ -82,7 +82,6 @@ private slots:
     void setDatabaseNameText();
     void ifMainWindowActivated();
     void firstStartOfMainWindow();
-
     void MWC_ConnectOfQActions();
     void MWC_InsertStackedWidgets();
     void MWC_CreationOfUiForms();
@@ -104,8 +103,10 @@ private slots:
     void closeEvent(QCloseEvent *event) override;
 
     void keyDeleteNote(const int noteId);
-    void whichGroupToShow();
-    void toShowGroupOfNewNote();
+    bool whichGroupToShow();
+    bool toShowGroupOfNewNote();
+
+    void setRowByRealGroupId();
 
 private:
     Ui::MainWindow *ui;

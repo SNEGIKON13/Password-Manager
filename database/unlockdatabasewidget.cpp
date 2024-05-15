@@ -31,7 +31,7 @@ void UnlockDatabaseWidget::on_unlockBaseButton_clicked()
     passwordEntry = databaseDecryptor.padPassword(passwordEntry);
     databaseDecryptor.setTryPassword(passwordEntry);
     databaseDecryptor.setFilePath(filePath);
-    isPasswordCorrect = SettingsManager::comparePasswordHash(filePath, passwordEntry);
+    isPasswordCorrect = HashingManager::comparePasswordHash(filePath, passwordEntry);
     if (!passwordEntry.isEmpty()) {
         if (isPasswordCorrect) {
             databaseDecryptor.decryptDatabase();

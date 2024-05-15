@@ -10,6 +10,8 @@ CONFIG += c++17
 
 SOURCES += \
     database/editdatabasewidget.cpp \
+    database/hashingmanager.cpp \
+    database/recentdatabasemanager.cpp \
     database/unlockdatabasewidget.cpp \
     database/welcomewidget.cpp \
     database/createdatabasewidget.cpp \
@@ -43,6 +45,8 @@ SOURCES += \
 
 
 HEADERS += \
+    database/hashingmanager.h \
+    database/recentdatabasemanager.h \
     database/unlockdatabasewidget.h \
     dbmanagement/databasedecryptor.h \
     dbmanagement/databaseeditor.h \

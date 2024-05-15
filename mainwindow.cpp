@@ -25,8 +25,6 @@ void MainWindow::MWC_ConnectOfQActions()
             this, &MainWindow::actionCopyUsername);
     connect(ui->actionCopyPassword, &QAction::triggered,
             this, &MainWindow::actionCopyPassword);
-    connect(ui->actionSort, &QAction::triggered,
-            this, &MainWindow::actionSort);
     connect(ui->actionAboutProgram, &QAction::triggered,
             this, &MainWindow::actionAboutProgram);
     connect(ui->actionQuit, &QAction::triggered,
@@ -97,6 +95,14 @@ void MainWindow::MWC_ConnectsOther()
             this, &MainWindow::receiveFilePath);
     connect(_addNewNoteWidget, &AddNewNoteWidget::transmitChangeToMainWindow,
             this, &MainWindow::changeStackedWidgetIndex);
+    connect(_addNewNoteWidget, &AddNewNoteWidget::transmitGroupId,
+            this, &MainWindow::setGroupId);
+    connect(_editExistNoteWidget, &EditExistNoteWidget::transmitGroupId,
+            this, &MainWindow::setGroupId);
+    connect(_addNewGroupWidget, &AddNewGroupWidget::transmitGroupId,
+            this, &MainWindow::setGroupId);
+    connect(_editExistGroupWidget, &EditExistGroupWidget::transmitGroupId,
+            this, &MainWindow::setGroupId);
     connect(_editExistNoteWidget, &EditExistNoteWidget::transmitChangeToMainWindow,
             this, &MainWindow::changeStackedWidgetIndex);
     connect(_addNewGroupWidget, &AddNewGroupWidget::transmitChangeToMainWindow,
@@ -179,8 +185,6 @@ void MainWindow::MWC_CreationOfToolBar()
     _toolbar->addWidget(separator3);
     _toolbar->addWidget(spacer1);
 
-    _toolbar->addAction(ui->actionSort);
-    ui->actionSort->setIcon(QIcon("://Images/Sort.png"));
     _toolbar->addAction(ui->actionAboutProgram);
     ui->actionAboutProgram->setIcon(QIcon("://Images/About.png"));
     _toolbar->addAction(ui->actionQuit);
@@ -262,35 +266,40 @@ void MainWindow::activatePopUpWidget(int index)
     }
 }
 
-void MainWindow::whichGroupToShow()
+bool MainWindow::whichGroupToShow()
 {
     if (counterOfNewGroupCreation != 0) {
         setNewGroupItem();
         counterOfNewGroupCreation--;
+        return true;
     }
-    else {
-        _databaseDisplay->showNotesByGroupId(ui->notesTableWidget, groupId);
-    }
+    return false;
 }
 
-void MainWindow::toShowGroupOfNewNote()
+void MainWindow::setRowByRealGroupId()
+{
+    QString realNameOfGroup = _dbc->findGroupNameByGroupID(groupId);
+    int rowIndex = -1;
+    for (int i = 0; i < ui->groupListWidget->count(); i++) {
+        if (ui->groupListWidget->item(i)->text() == realNameOfGroup) {
+            rowIndex = i;
+            break;
+        }
+    }
+    if (rowIndex != -1) {
+        ui->groupListWidget->setCurrentRow(rowIndex);
+    }
+    counterOfNewNoteCreation--;
+}
+
+bool MainWindow::toShowGroupOfNewNote()
 {
     if (counterOfNewNoteCreation != 0) {
         _databaseDisplay->showNotesByGroupId(ui->notesTableWidget, groupId);
-        counterOfNewNoteCreation--;
+        setRowByRealGroupId();
+        return true;
     }
-}
-
-void MainWindow::ifMainWindowActivated()
-{
-    if (ui->stackedWidget->currentIndex() == IndexMainWindow) {
-        showDatabasesGroups();
-        adjustTableWidget();
-        whichGroupToShow();
-        toShowGroupOfNewNote();
-        _addNewNoteWidget->populateGroupComboBox();
-        _editExistNoteWidget->populateGroupComboBox();
-    }
+    return false;
 }
 
 void MainWindow::firstStartOfMainWindow()
@@ -299,8 +308,24 @@ void MainWindow::firstStartOfMainWindow()
         showDatabasesGroups();
         adjustTableWidget();
         setDefaultGroupIdOnStart();
-        ui->groupListWidget->setCurrentRow(groupId - 1);
+        ui->groupListWidget->setCurrentRow(0);
         _databaseDisplay->showNotesByGroupId(ui->notesTableWidget, groupId);
+        _addNewNoteWidget->populateGroupComboBox();
+        _editExistNoteWidget->populateGroupComboBox();
+    }
+}
+
+void MainWindow::ifMainWindowActivated()
+{
+    if (ui->stackedWidget->currentIndex() == IndexMainWindow) {
+        showDatabasesGroups();
+        adjustTableWidget();
+        if (!whichGroupToShow()) {
+            if (!toShowGroupOfNewNote()) {
+                _databaseDisplay->showNotesByGroupId(ui->notesTableWidget, groupId);
+                setRowByRealGroupId();
+            }
+        }
         _addNewNoteWidget->populateGroupComboBox();
         _editExistNoteWidget->populateGroupComboBox();
     }
@@ -355,11 +380,11 @@ void MainWindow::receivePossibleFilePath(const QString &fp)
 
 void MainWindow::saveNewFilePath()
 {
-    recentDatabases = SettingsManager::loadRecentDatabases();
+    recentDatabases = RecentDatabaseManager::loadRecentDatabases();
     if (!DatabaseController::getFilePath().isEmpty() && !recentDatabases.contains(DatabaseController::getFilePath()))
     {
         recentDatabases.prepend(DatabaseController::getFilePath());;
-        SettingsManager::saveRecentDatabases(recentDatabases);
+        RecentDatabaseManager::saveRecentDatabases(recentDatabases);
         _welcomeWidget->showRecentDatabases();
     }
 }
@@ -399,25 +424,26 @@ void MainWindow::receiveFilePath(const QString &fp)
 
 void MainWindow::actionCreateDatabase()
 {
-    if (ui->stackedWidget->currentIndex() == IndexMainWindow) {
-        _databaseEncryptor->encryptDatabase();
-        changeStackedWidgetIndex(IndexWelcomeWidget);
+    if (ui->stackedWidget->currentIndex() == IndexWelcomeWidget) {
         _createDatabaseWidget->show();
     }
     else {
+        _databaseEncryptor->encryptDatabase();
+        _dbc->clearFilePath();
         changeStackedWidgetIndex(IndexWelcomeWidget);
+        _welcomeWidget->showRecentDatabases();
         _createDatabaseWidget->show();
     }
 }
 
 void MainWindow::actionChooseUnlockingBase()
 {
-    if (ui->stackedWidget->currentIndex() == IndexMainWindow) {
-        _databaseEncryptor->encryptDatabase();
-        changeStackedWidgetIndex(IndexWelcomeWidget);
+    if (ui->stackedWidget->currentIndex() == IndexWelcomeWidget) {
         _welcomeWidget->showRecentDatabases();
     }
     else {
+        _databaseEncryptor->encryptDatabase();
+        _dbc->clearFilePath();
         changeStackedWidgetIndex(IndexWelcomeWidget);
         _welcomeWidget->showRecentDatabases();
     }
@@ -514,6 +540,12 @@ void MainWindow::setNewGroupItem()
     int indexOfLastElement = ui->groupListWidget->count() - 1;
     QListWidgetItem* newGroupItem = ui->groupListWidget->item(indexOfLastElement);
     on_groupListWidget_itemClicked(newGroupItem);
+    ui->groupListWidget->setCurrentRow(indexOfLastElement);
+}
+
+void MainWindow::setGroupId(int newGroupId)
+{
+    groupId = newGroupId;
 }
 
 void MainWindow::actionCreateGroup()
@@ -569,7 +601,9 @@ void MainWindow::actionDeleteGroup()
             setDefaultGroupIdOnStart();
             _databaseDisplay->showDatabasesGroups(ui->groupListWidget);
             _databaseDisplay->showNotesByGroupId(ui->notesTableWidget, groupId);
+            ui->groupListWidget->setCurrentRow(0);
             _mustDeleteGroup = false;
+            ifMainWindowActivated();
         }
     }
     else {
@@ -595,9 +629,11 @@ void MainWindow::actionCopyPassword()
 
 void MainWindow::on_groupListWidget_itemClicked(QListWidgetItem *item)
 {
-    int row = ui->groupListWidget->row(item);
-    groupId = ui->groupListWidget->item(row)->data(Qt::UserRole).toInt();
-    _databaseDisplay->showNotesByGroupId(ui->notesTableWidget, groupId);
+    if (!_databaseGroupsCreator->isGroupTableEmpty()) {
+        int row = ui->groupListWidget->row(item);
+        groupId = ui->groupListWidget->item(row)->data(Qt::UserRole).toInt();
+        _databaseDisplay->showNotesByGroupId(ui->notesTableWidget, groupId);
+    }
 }
 
 
@@ -606,14 +642,6 @@ void MainWindow::on_groupListWidget_itemClicked(QListWidgetItem *item)
 
 
 
-
-void MainWindow::actionSort()
-{
-    if (_dbc->isEmptyFilePath()) {
-        QMessageBox::warning(this, "Ошибка", "Cначала войдите в базу данных!");
-        //TODOMAYBE
-    }
-}
 
 void MainWindow::actionAboutProgram()
 {
@@ -624,11 +652,11 @@ void MainWindow::actionAboutProgram()
 
 void MainWindow::actionQuit()
 {
-    if (ui->stackedWidget->currentIndex() == IndexMainWindow) {
-        _databaseEncryptor->encryptDatabase();
+    if (ui->stackedWidget->currentIndex() == IndexWelcomeWidget) {
         close();
     }
     else {
+        _databaseEncryptor->encryptDatabase();
         close();
     }
 

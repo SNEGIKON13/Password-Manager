@@ -422,7 +422,7 @@ AES256::decrypt(std::istream & in,
 Byte_Block<16> &
 AES256::ecb(Byte_Block<16> & buf)
 {
-	return m_aes256_base.encrypt(buf);
+    return m_aes256_base.encrypt(buf);
 }
 
 
@@ -433,7 +433,7 @@ AES256::ecb(Byte_Block<16> & buf)
 Byte_Block<16> &
 AES256::ecb_inv(Byte_Block<16> & buf)
 {
-	return m_aes256_base.decrypt(buf);
+    return m_aes256_base.decrypt(buf);
 }
 
 
@@ -477,8 +477,8 @@ Byte_Block<16> &
 AES256::pcbc(Byte_Block<16> & buf)
 {
     Byte_Block<16> tmp(buf);
-	
-	buf ^= m_IV;
+
+    buf ^= m_IV;
     m_aes256_base.encrypt(buf);
     m_IV = buf ^ tmp;
 
@@ -496,10 +496,10 @@ AES256::pcbc_inv(Byte_Block<16> & buf)
     Byte_Block<16> tmp(buf);
 
     m_aes256_base.decrypt(buf);
-	buf ^= m_IV;
-	m_IV = buf ^ tmp;
+    buf ^= m_IV;
+    m_IV = buf ^ tmp;
 
-	return buf;
+    return buf;
 }
 
 
@@ -510,9 +510,9 @@ AES256::pcbc_inv(Byte_Block<16> & buf)
 Byte_Block<16> &
 AES256::cfb128(Byte_Block<16> & buf)
 {
-	m_aes256_base.encrypt(m_IV);
-	m_IV = buf ^= m_IV;
-	return buf;
+    m_aes256_base.encrypt(m_IV);
+    m_IV = buf ^= m_IV;
+    return buf;
 }
 
 
@@ -523,12 +523,12 @@ AES256::cfb128(Byte_Block<16> & buf)
 Byte_Block<16> &
 AES256::cfb128_inv(Byte_Block<16> & buf)
 {
-	Byte_Block<16> tmp(m_IV);
+    Byte_Block<16> tmp(m_IV);
 
-	m_aes256_base.encrypt(tmp);
-	m_IV = buf;
+    m_aes256_base.encrypt(tmp);
+    m_IV = buf;
 
-	return buf ^= tmp;
+    return buf ^= tmp;
 }
 
 
@@ -564,7 +564,7 @@ AES256::cfb8(Byte_Block<16> & buf)
 Byte_Block<16> &
 AES256::cfb8_inv(Byte_Block<16> & buf)
 {
-	Byte_Block<16> shift_reg(m_IV);
+    Byte_Block<16> shift_reg(m_IV);
 
     // Decrypt byte-wise up to the known length of "good" bytes
     // in the block - decrypting more would mess up the current
@@ -582,7 +582,7 @@ AES256::cfb8_inv(Byte_Block<16> & buf)
     }
 
     m_IV = shift_reg;
-	return buf;
+    return buf;
 }
 
 
@@ -593,8 +593,8 @@ AES256::cfb8_inv(Byte_Block<16> & buf)
 Byte_Block<16> &
 AES256::ofb(Byte_Block<16> & buf)
 {
-	m_aes256_base.encrypt(m_IV);
-	return buf ^= m_IV;
+    m_aes256_base.encrypt(m_IV);
+    return buf ^= m_IV;
 }
 
 
@@ -605,241 +605,11 @@ AES256::ofb(Byte_Block<16> & buf)
 Byte_Block<16> &
 AES256::ctr(Byte_Block<16> & buf)
 {
-	Byte_Block<16> tmp = m_IV++;
+    Byte_Block<16> tmp = m_IV++;
 
-	m_aes256_base.encrypt(tmp);
-	return buf ^= tmp;
+    m_aes256_base.encrypt(tmp);
+    return buf ^= tmp;
 }
-
-
-
-
-
-/*=============================================================
- *=============================================================*/
-
-/*---------------------------------------------*
- * Test main() functions:
- *
- * a) Test string encryption on all modes: compile with -DTEST_AES256_STRING
- * b) Test stream encryption on all modes: compile with -DTEST_AES256_STREAM
- * c) Test encryption of (README.txt) file:  compile with -DTEST_AES256_FILE
- *
- * Note that this isn't a real test, it just gives some feedback when
- * something is obviously badly broken.
- *---------------------------------------------*/
-
-#if defined TEST_AES256_STRING
-
-#include <vector>
-#include <cctype>
-
-
-/*---------------------------------------------*
- *---------------------------------------------*/
-
-static
-std::string
-to_ascii(std::string const & in)
-{
-	std::string out(in);
-	for (size_t i = 0; i < out.size(); ++i)
-		if (! std::isprint(out[i]))
-			out[i] = '.';
-
-	return out;
-}
-
-int
-main()
-{
-    std::string key("abcdefghijklmnopqrstuvwxyz123456");
-
-	// Strings to test the encryption and decryption on. The last two are
-	// for testing the boundary conditions when the length of the test to
-	// ncrypt is either just one byte short of 16 bytes or exactly 16 bytes.
-
-	std::vector<std::string> txts; 
-	txts.push_back("This is a test, let's see how it works out...");
-	txts.push_back("Short text");
-	txts.push_back("0123456789abcdef");
-	txts.push_back("0123456789abcde");
-
-	// Names of the different modes
-
-	std::vector<std::string> modes;
-	modes.push_back("Electronic Codebook (ECB)");
-	modes.push_back("Cipher Block Chaining (CBC)");
-	modes.push_back("Propagating Cipher Block Chaining (PCBC)");
-	modes.push_back("Cipher Feedback 128 (CFB-128)");
-	modes.push_back("Cipher Feedback 8 (CFB-8)");
-	modes.push_back("Output Feedback (OFB)");
-	modes.push_back("Counter (CTR)");
-
-	// Check all strings in all modes
-
-	AES256 aes(key);
-
-    aes.set_padding_mode(AES256::ANSIX9_23);
-
-	for (int mode = AES256::ECB; mode <= AES256::CTR; ++mode) {
-		aes.set_chaining_mode(static_cast<AES256::Chaining_Mode>(mode));
-
-		std::cout << "Testing " << modes[mode] << " Mode:" << std::endl;
-
-		for (std::vector<std::string>::const_iterator it = txts.begin();
-             it != txts.end(); ++it ) {
-			std::string txt(*it);
-			std::cout << std::endl << "Plaintext: \"" << txt << "\" ("
-					  << txt.size() << ")" << std::endl;
-
-			txt = aes.encrypt(txt);
-			std::cout << "Encrypted: \"" << to_ascii(txt)
-                      << "\" (" << txt.size() << ")" << std::endl;
-
-			txt = aes.decrypt(txt);
-			std::cout << "Decrypted: \"" << to_ascii(txt)
-                      << "\" (" << txt.size() << ")" << std::endl;
-		}
-
-		std::cout << std::endl;
-	}
-
-    return 0;
-}
-
-#endif
-
-
-#if defined TEST_AES256_STREAM
-
-/*---------------------------------------------*
- *---------------------------------------------*/
-
-#include <vector>
-#include <cctype>
-#include <sstream>
-
-
-static
-std::string
-to_ascii(std::string const & in)
-{
-	std::string out(in);
-	for (size_t i = 0; i < out.size(); ++i )
-		if (! std::isprint(out[i]))
-			out[i] = '.';
-
-	return out;
-}
-
-int
-main()
-{
-    std::string key("abcdefghijklmnopqrstuvwxyz123456");
-
-	// Strings to test the encryption and decryption on. The last two are
-	// for testing the boundary conditions when the length of the test to
-	// ncrypt is either just one byte short of 16 bytes or exactly 16 bytes.
-
-	std::vector<std::string> txts; 
-	txts.push_back("This is a test, let's see how it works out...");
-	txts.push_back("Short text");
-	txts.push_back("0123456789abcdef");
-	txts.push_back("0123456789abcde");
-
-	// Names of the different modes
-
-	std::vector<std::string> modes;
-	modes.push_back("Electronic Codebook (ECB)");
-	modes.push_back("Cipher Block Chaining (CBC)");
-	modes.push_back("Propagating Cipher Block Chaining (PCBC)");
-	modes.push_back("Cipher Feedback 128 (CFB-128)");
-	modes.push_back("Cipher Feedback 8 (CFB-8)");
-	modes.push_back("Cipher Feedback 1 (CFB-1)");
-	modes.push_back("Output Feedback (OFB)");
-	modes.push_back("Output Feedback (OFB)");
-	modes.push_back("Counter (CTR)");
-
-	// Check all strings in all modes
-
-	AES256 aes(key);
-
-    aes.set_padding_mode(AES256::ANSIX9_23);
-
-	for (int mode = AES256::ECB; mode <= AES256::CTR; ++mode) {
-		aes.set_chaining_mode(static_cast<AES256::Chaining_Mode>(mode));
-
-		std::cout << "Testing " << modes[mode] << " Mode:" << std::endl;
-
-		for (std::vector<std::string>::const_iterator it = txts.begin();
-             it != txts.end(); ++it ) {
-            std::stringstream in, out;
-
-            in << *it;
-            std::string txt = in.str();
-
-			std::cout << std::endl <<  "Plaintext: \"" << txt << "\" ("
-					  << txt.size() << ")" << std::endl;
-
-			aes.encrypt(in, out);
-            txt = out.str();
-
-			std::cout << "Encrypted: \"" << to_ascii(txt)
-                      << "\" (" << txt.size() << ")" << std::endl;
-
-            std::stringstream in2, out2;
-
-            in2 << txt;
-            aes.decrypt(in2, out2);
-            txt = out2.str();
-
-			std::cout << "Decrypted: \"" << to_ascii(txt)
-                      << "\" (" << txt.size() << ")" << std::endl;
-		}
-
-		std::cout << std::endl;
-	}
-
-    return 0;
-}
-
-#endif
-
-#if defined TEST_AES256_FILE
-
-#include <fstream>
-
-/*---------------------------------------------*
- *---------------------------------------------*/
-
-int
-main()
-{
-    std::ifstream ifs("README.txt", std::ifstream::in);
-    std::ofstream ofs("README.enc", std::ifstream::out);
-
-    std::string key("abcdefghijklmnopqrstuvwxyz123456");
-	AES256 aes(key);
-
-    aes.encrypt(ifs, ofs);
-
-    ifs.close();
-    ofs.close();
-
-    ifs.open("README.enc", std::ifstream::in);
-    ofs.open("README.dec", std::ifstream::out);
-
-    aes.decrypt(ifs, ofs);
-
-    ifs.close();
-    ofs.close();
-
-    return 0;
-}
-
-#endif
-
 
 /*
  * Local variables:

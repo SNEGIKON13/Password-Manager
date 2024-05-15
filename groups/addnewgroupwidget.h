@@ -22,10 +22,13 @@ public:
     ~AddNewGroupWidget();
 
 signals:
+    void transmitGroupId(int group_id);
     void transmitChangeToMainWindow(int index);
 
 private slots:
     void on_buttonBox_accepted();
+    void clearUi();
+    void clearStruct();
     void clearAll();
     void on_buttonBox_rejected();
 

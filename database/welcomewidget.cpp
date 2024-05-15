@@ -45,7 +45,7 @@ void WelcomeWidget::changeRecentDatabasesStatusText()
 
 void WelcomeWidget::showRecentDatabases()
 {
-    recentDatabases = SettingsManager::loadRecentDatabases();
+    recentDatabases = RecentDatabaseManager::loadRecentDatabases();
     ui->listWidget->clear();
     ui->listWidget->addItems(recentDatabases);
     changeRecentDatabasesStatusText();
@@ -62,7 +62,7 @@ void WelcomeWidget::on_listWidget_itemClicked(QListWidgetItem *item)
     else {
         QMessageBox::warning(this, "Базы данных нет!", "К сожалению, на данный момент по указанному"
                                                        " адресу база данных отсутствует");
-        recentDatabases = SettingsManager::deleteOneListItem(filePath);
+        recentDatabases = RecentDatabaseManager::deleteOneListItem(filePath);
         ui->listWidget->clear();
         ui->listWidget->addItems(recentDatabases);
     }
@@ -75,7 +75,7 @@ void WelcomeWidget::on_deleteAllNonExistDb_clicked()
         QString itemText = ui->listWidget->item(recentDatabasesCount)->text();
         QFile databaseFile(itemText);
         if (!databaseFile.exists()) {
-            recentDatabases = SettingsManager::deleteOneListItem(itemText);
+            recentDatabases = RecentDatabaseManager::deleteOneListItem(itemText);
             ui->listWidget->clear();
             ui->listWidget->addItems(recentDatabases);
         }

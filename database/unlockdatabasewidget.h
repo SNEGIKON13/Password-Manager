@@ -5,7 +5,7 @@
 #include <QMessageBox>
 #include <QCloseEvent>
 
-#include "database/settingsmanager.h"
+#include "database/hashingmanager.h"
 #include "dbmanagement/databasedecryptor.h"
 #include "structures/EnumWidgets.h"
 

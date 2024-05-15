@@ -43,8 +43,8 @@ void EditDatabaseWidget::on_buttonBox_accepted()
     if (!newBaseName.isEmpty() && !newBasePassword.isEmpty()) {
         databaseEditor->updateDatabasePassword(newBasePassword);
         databaseEditor->updateDatabaseName(checkIfDatabaseExistWarning, newBaseName, deleteAndRename);
-        SettingsManager::removeOldHashRecord(oldBaseName, newBaseName);
-        SettingsManager::savePasswordHash(newBaseName, newBasePassword);
+        HashingManager::removeOldHashRecord(oldBaseName, newBaseName);
+        HashingManager::savePasswordHash(newBaseName, newBasePassword);
     }
     else {
         QMessageBox::warning(this, "Ошибка", "Введите новое название и пароль базы данных");

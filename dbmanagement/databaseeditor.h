@@ -13,7 +13,7 @@ public:
     void updateDatabasePassword(QString newBasePassword);
 
 private:
-    QWidget *widget;
+    QWidget widget;
 };
 
 #endif // DATABASEEDITOR_H

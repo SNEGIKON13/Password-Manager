@@ -4,6 +4,8 @@
 #include "dbmanagement/databasecontroller.h"
 #include "dbmanagement/databasegroupscreator.h"
 
+#include <QDateTime>
+
 class DatabaseCreator : public DatabaseController
 {
 public:

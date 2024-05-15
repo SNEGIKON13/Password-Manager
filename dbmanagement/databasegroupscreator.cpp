@@ -15,3 +15,26 @@ void DatabaseGroupsCreator::createNewGroup(const GroupData &groupData)
     query.exec();
     closeDatabase();
 }
+
+bool DatabaseGroupsCreator::isGroupTableEmpty()
+{
+    openDatabase();
+    bool isEmpty = true;
+    int count = 0;
+    QSqlQuery query;
+    QString isEmptyQuery = "SELECT COUNT(*) FROM groups";
+    query.prepare(isEmptyQuery);
+    if (query.exec())
+    {
+        if (query.next())
+        {
+            count = query.value(0).toInt();
+            if (count != 0) {
+                isEmpty = false;
+            }
+        }
+    }
+    closeDatabase();
+    return isEmpty;
+}
+

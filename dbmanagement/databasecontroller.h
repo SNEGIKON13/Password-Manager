@@ -12,6 +12,7 @@
 #include <QTableWidget>
 #include <QHeaderView>
 #include <QComboBox>
+#include <QWidget>
 
 #include "structures/EnumWidgets.h"
 #include "structures/NodeData.h"
@@ -24,19 +25,20 @@ public:
     explicit DatabaseController(QObject *parent = nullptr);
 
     QMap<int, QString> getGroupNames();
+    int findGroupIDdByGroupName(QString comboText);
+    QString findGroupNameByGroupID(int id);
+
     static void setFilePath(const QString &filePath);
     static QString getFilePath();
+
     bool openDatabase();
     void closeDatabase();
     bool isEmptyFilePath();
+    void clearFilePath();
+
     QString padPassword(const QString& password);
-
-    // void sortGroup();
-    // void sortNotes();
-
     QString getPassword() const;
     void setPassword(const QString &newPassword);
-
     QString getTryPassword() const;
     void setTryPassword(const QString &newTryPassword);  
 

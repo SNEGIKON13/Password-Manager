@@ -12,6 +12,12 @@ AddNewNoteWidget::~AddNewNoteWidget()
     delete ui;
 }
 
+void AddNewNoteWidget::getND_Group_ID()
+{
+    QString comboText = ui->chooseGroup->currentText();
+    nd.group_id = databaseNotesCreator->findGroupIDdByGroupName(comboText);
+}
+
 void AddNewNoteWidget::on_buttonBox_accepted()
 {
     clearStruct();
@@ -53,15 +59,16 @@ void AddNewNoteWidget::on_buttonBox_accepted()
         nd.otherNotes = "";
     }
 
-    nd.group_id = ui->chooseGroup->currentIndex() + 1;
+    getND_Group_ID();
 
-    if (nd.group_id == 0) {
+    if (nd.group_id == -999) {
         QMessageBox::warning(this, "Ошибка", "Выберите группу!");
         return;
     }
 
     databaseNotesCreator->createNewNote(nd);
 
+    emit transmitGroupId(nd.group_id);
     clearAll();
     emit transmitChangeToMainWindow(IndexMainWindow);
 }
@@ -81,7 +88,6 @@ void AddNewNoteWidget::populateGroupComboBox()
         QString groupName = it.value();
         ui->chooseGroup->insertItem(groupId, groupName);
     }
-    ui->chooseGroup->setCurrentIndex(0);
 }
 
 void AddNewNoteWidget::clearUiText()

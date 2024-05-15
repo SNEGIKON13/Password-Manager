@@ -7,7 +7,7 @@
 #include <QMessageBox>
 #include <QStandardPaths>
 
-#include "database/settingsmanager.h"
+#include "database/recentdatabasemanager.h"
 #include "structures/EnumWidgets.h"
 
 namespace Ui {

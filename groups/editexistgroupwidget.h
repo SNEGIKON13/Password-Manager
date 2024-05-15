@@ -24,6 +24,7 @@ public:
     void toFillFields();
 
 signals:
+    void transmitGroupId(int group_id);
     void transmitChangeToMainWindow(int index);
 
 private slots:

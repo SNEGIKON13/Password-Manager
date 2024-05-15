@@ -3,7 +3,7 @@
 
 #include <QDialog>
 
-#include "database/settingsmanager.h"
+#include "database/hashingmanager.h"
 #include "dbmanagement/databaseeditor.h"
 #include "other/checkifdatabaseexistwarning.h"
 

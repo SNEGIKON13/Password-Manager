@@ -10,27 +10,29 @@ void DatabaseEditor::updateDatabaseName(CheckIfDatabaseExistWarning *checkIfData
         QString filePath = DatabaseController::getFilePath();
         QFileInfo fileInfo(filePath);
         QString newFilePath = fileInfo.path() + '/' + newBaseName + "." + fileInfo.suffix();
+
         if (QFile::exists(newFilePath)) {
             checkIfDatabaseExistWarning->show();
             if (deleleAndRename) {
                 bool removeSuccess = QFile::remove(newFilePath);
                 if (!removeSuccess) {
-                    QMessageBox::warning(widget, "Ошибка", "Ошибка при удалении существующего файла базы данных");
+                    QMessageBox::warning(&widget, "Ошибка", "Ошибка при удалении существующего файла базы данных");
                     return;
                 }
-                bool success = QFile::rename(filePath, newFilePath);
-                if (success) {
+
+                bool renameSuccess = QFile::rename(filePath, newFilePath);
+                if (renameSuccess) {
                     setFilePath(newFilePath);
                 } else {
-                    QMessageBox::warning(widget, "Ошибка", "Ошибка при переименовании файла базы данных");
+                    QMessageBox::warning(&widget, "Ошибка", "Ошибка при переименовании файла базы данных");
                 }
             }
         } else {
-            bool success = QFile::rename(filePath, newFilePath);
-            if (success) {
+            bool renameSuccess = QFile::rename(filePath, newFilePath);
+            if (renameSuccess) {
                 setFilePath(newFilePath);
             } else {
-                QMessageBox::warning(widget, "Ошибка", "Ошибка при переименовании файла базы данных");
+                QMessageBox::warning(&widget, "Ошибка", "Ошибка при переименовании файла базы данных");
             }
         }
     }
@@ -42,6 +44,6 @@ void DatabaseEditor::updateDatabasePassword(QString newBasePassword)
         setPassword(newBasePassword);
     }
     else {
-        QMessageBox::warning(widget, "Ошибка", "Введите новый пароль базы данных!");
+        QMessageBox::warning(&widget, "Ошибка", "Введите новый пароль базы данных!");
     }
 }

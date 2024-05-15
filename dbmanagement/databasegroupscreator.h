@@ -8,6 +8,10 @@ class DatabaseGroupsCreator : public DatabaseController
 public:
     explicit DatabaseGroupsCreator(QObject *parent = nullptr);
     void createNewGroup(const GroupData &groupData);
+    bool isGroupTableEmpty();
+
+private:
+    QWidget widget;
 };
 
 #endif // DATABASEGROUPSCREATOR_H

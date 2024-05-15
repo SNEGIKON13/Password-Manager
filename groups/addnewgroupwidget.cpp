@@ -14,7 +14,7 @@ AddNewGroupWidget::~AddNewGroupWidget()
 
 void AddNewGroupWidget::on_buttonBox_accepted()
 {
-    clearAll();
+    clearStruct();
     if (ui->groupName->text().isEmpty()) {
         QMessageBox::warning(this, "Ошибка", "Ввод названия группы обязателен");
         return;
@@ -30,15 +30,25 @@ void AddNewGroupWidget::on_buttonBox_accepted()
     }
 
     databaseGroupCreator->createNewGroup(gd);
-    emit transmitChangeToMainWindow(IndexMainWindow);
+    emit transmitGroupId(gd.id);
     clearAll();
-
+    emit transmitChangeToMainWindow(IndexMainWindow);
 }
 
-void AddNewGroupWidget::clearAll()
+void AddNewGroupWidget::clearStruct()
 {
     gd.groupName.clear();
     gd.otherNotes.clear();
+}
+
+void AddNewGroupWidget::clearUi() {
+    ui->groupName->clear();
+    ui->otherNotesForGroup->clear();
+}
+
+void AddNewGroupWidget::clearAll() {
+    clearStruct();
+    clearUi();
 }
 
 void AddNewGroupWidget::on_buttonBox_rejected()

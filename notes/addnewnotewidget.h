@@ -25,6 +25,7 @@ public slots:
     void populateGroupComboBox();
 
 signals:
+    void transmitGroupId(int group_id);
     void transmitChangeToMainWindow(int index);
 
 private slots:
@@ -34,6 +35,8 @@ private slots:
     void clearUiText();
     void clearStruct();
     void clearAll();
+
+void getND_Group_ID();
 
 private:
     Ui::AddNewNoteWidget *ui;

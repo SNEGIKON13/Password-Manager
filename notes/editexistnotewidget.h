@@ -26,12 +26,15 @@ public:
     void toFillFields();
 
 signals:
+    void transmitGroupId(int group_id);
     void transmitChangeToMainWindow(int index);
 
 private slots:
     void on_buttonBox_accepted();
     void on_buttonBox_rejected();
     void clearAllExceptId();
+    void setRowByRealGroupId();
+    void getND_Group_ID();
 
 private:
     Ui::EditExistNoteWidget *ui;
@@ -41,6 +44,7 @@ private:
     QString url;
     QString passwordEntry;
     QString otherNotes;
+    QString realNameOfGroup;
     DatabaseNotesEditor *databaseNotesEditor;
     NoteData nd;
     QTableWidgetItem *selectedNote;

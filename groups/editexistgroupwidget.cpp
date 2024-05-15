@@ -35,9 +35,9 @@ void EditExistGroupWidget::on_buttonBox_accepted()
     }
 
     databaseGroupEditor->updateGroup(gd);
-    emit transmitChangeToMainWindow(IndexMainWindow);
+    emit transmitGroupId(id);
     clearAllExceptId();
-
+    emit transmitChangeToMainWindow(IndexMainWindow);
 }
 
 

@@ -39,7 +39,7 @@ void CreateDatabaseWidget::on_buttonBox_accepted()
         } else {
             return;
         }
-        SettingsManager::savePasswordHash(baseName, basePassword);
+        HashingManager::savePasswordHash(baseName, basePassword);
         clear_all();
         close();
     }

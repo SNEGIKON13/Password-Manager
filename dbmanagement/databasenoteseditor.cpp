@@ -46,7 +46,9 @@ void DatabaseNotesEditor::updateNote(NoteData &noteData)
 
     QSqlQuery query;
     QString queryRequest = "UPDATE notes SET note_name = :noteName, group_id = :groupId,"
-                           " login = :login, url = :url, password = :password, other_notes = :otherNotes WHERE id = :noteId";
+                           " login = :login, url = :url, password = :password,"
+                           " other_notes = :otherNotes, updated_at = :updatedAt"
+                           " WHERE id = :noteId";
     query.prepare(queryRequest);
     query.bindValue(":noteName", noteData.noteName);
     query.bindValue(":groupId", noteData.group_id);
@@ -55,6 +57,10 @@ void DatabaseNotesEditor::updateNote(NoteData &noteData)
     query.bindValue(":password", noteData.passwordEntry);
     query.bindValue(":otherNotes", noteData.otherNotes);
     query.bindValue(":noteId", noteData.id);
+    QDateTime currentDateTime = QDateTime::currentDateTimeUtc();
+    currentDateTime = currentDateTime.addSecs(3 * 3600);
+    QString formattedDateTime = currentDateTime.toString("yyyy-MM-dd HH:mm:ss");
+    query.bindValue(":updatedAt", formattedDateTime);
 
     if (query.exec())
     {

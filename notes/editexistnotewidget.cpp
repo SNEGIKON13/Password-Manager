@@ -20,7 +20,13 @@ void EditExistNoteWidget::toFillFields()
     ui->url->setText(nd.url);
     ui->passwordEntry->setText(nd.passwordEntry);
     ui->otherNotes->setText(nd.otherNotes);
-    ui->chooseGroup->setCurrentIndex(nd.group_id - 1);
+    setRowByRealGroupId();
+}
+
+void EditExistNoteWidget::getND_Group_ID()
+{
+    realNameOfGroup = ui->chooseGroup->currentText();
+    nd.group_id = databaseNotesEditor->findGroupIDdByGroupName(realNameOfGroup);
 }
 
 void EditExistNoteWidget::on_buttonBox_accepted()
@@ -69,7 +75,11 @@ void EditExistNoteWidget::on_buttonBox_accepted()
         nd.otherNotes = "";
     }
 
+    getND_Group_ID();
+
     databaseNotesEditor->updateNote(nd);
+
+    emit transmitGroupId(nd.group_id);
     clearAllExceptId();
     emit transmitChangeToMainWindow(IndexMainWindow);
 }
@@ -95,7 +105,6 @@ void EditExistNoteWidget::populateGroupComboBox()
         QString groupName = it.value();
         ui->chooseGroup->insertItem(groupId, groupName);
     }
-    ui->chooseGroup->setCurrentIndex(0);
 }
 
 void EditExistNoteWidget::clearAllExceptId()
@@ -106,4 +115,20 @@ void EditExistNoteWidget::clearAllExceptId()
     nd.passwordEntry.clear();
     nd.otherNotes.clear();
     nd.group_id = 1;
+}
+
+void EditExistNoteWidget::setRowByRealGroupId() {
+    realNameOfGroup = databaseNotesEditor->findGroupNameByGroupID(nd.group_id);
+    int indexOfRealName = -1;
+
+    for (int i = 0; i < ui->chooseGroup->count(); i++) {
+        if (ui->chooseGroup->itemText(i) == realNameOfGroup) {
+            indexOfRealName = i;
+            break;
+        }
+    }
+
+    if (indexOfRealName != -1) {
+        ui->chooseGroup->setCurrentIndex(indexOfRealName);
+    }
 }
