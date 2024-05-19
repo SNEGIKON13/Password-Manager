@@ -66,15 +66,18 @@ void DatabaseController::setFilePath(const QString &filePath)
     DatabaseController::filePath = filePath;
 }
 
-bool DatabaseController::openDatabase()
-{
-    if (!db.isOpen()) {
-        db = QSqlDatabase::addDatabase("QSQLITE");
+bool DatabaseController::openDatabase() {
+    if (QSqlDatabase::contains("qt_sql_default_connection")) {
+        QSqlDatabase db = QSqlDatabase::database("qt_sql_default_connection");
+        if (db.isOpen()) {
+            return true;
+        } else {
+            return db.open();
+        }
+    } else {
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "qt_sql_default_connection");
         db.setDatabaseName(filePath);
         return db.open();
-    }
-    else {
-        return true;
     }
 }
 
