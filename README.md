@@ -19,11 +19,11 @@ Course Work OAIP 2024, получил 10 с кайфом.
  
 Применяется в `database/editdatabasewidget.cpp` в функции `EditDatabaseWidget::on_buttonBox_accepted()`
 
-![Algorithm scheme](Password-Manager/schemes/3.png)
+![Algorithm scheme](schemes/3.png)
  
 ## Алгоритм создания новой записи 
  
 Применяется в `notes/addnewnotewidget.cpp` в функции `AddNewNoteWidget::on_buttonBox_accepted()`
 
-![Algorithm scheme](Password-Manager/schemes/4.png)
+![Algorithm scheme](schemes/4.png)
 
